@@ -1,4 +1,8 @@
-html, body, #content-container{
-    background-color: black;
-    color: white;
+#content-container{
+    padding: 2rem;
+    margin-left: var(--navbar-collapsed-width, 60px);
+    min-height: 100vh;
+
+    background-color: var(--primary-background-color);
+    color: var(--primary-color);
 }
