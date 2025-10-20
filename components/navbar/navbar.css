@@ -1,5 +1,5 @@
 /* Collapsed */
-nav{
+#nav-collapsed {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -16,6 +16,7 @@ nav{
     padding-top: 2rem;
 
     background-color:var(--secondary-background-color);
+    border-right: 1px solid black;
 }
 
 nav a {
@@ -44,3 +45,28 @@ nav a:hover img {
 }
 
 /* Expanded */
+#nav-expanded {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    left: var(--navbar-collapsed-width);
+    position: absolute;
+    top: 0;
+    z-index: 999;
+
+    height: 100vh;
+    width: 200px;
+
+    background-color: rgb(255, 231, 94);    
+    border-right: 1px solid var(--secondary-color);
+
+    padding: 10px;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+
+    transition: left 0.5s ease-out;
+}
+
+#nav-expanded.hidden {
+    left: -200px /* slides into view */
+}

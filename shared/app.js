@@ -73,6 +73,10 @@ async function loadNavbar() {
       loadAsset(navbarFiles, jsFile),
     ]);
     document.getElementById(navbarId).innerHTML = html;
+
+    if (typeof initNavbar === "function") initNavbar();
+    else throw new Error("Component init function not found");
+
     console.log("Navbar fully loaded");
   } catch (error) {
     console.error(`Failed to load navbar: ${error}`);
