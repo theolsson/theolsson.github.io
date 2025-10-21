@@ -1,6 +1,6 @@
 :root{
     /* Sizes */
-    --navbar-collapsed-width: 60px;
+    --navbar-collapsed-size: 60px;
 
     /* Colors */
     --primary-background-color: black;

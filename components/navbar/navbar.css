@@ -1,72 +1,99 @@
+/*----------------------------------------------------------------------*/
+/* Local variables */
+/*----------------------------------------------------------------------*/
+nav {
+  --padding-y-axis: 2rem;
+  --padding-x-axis: 10px;
+}
+/*----------------------------------------------------------------------*/
+/* WIP */
+/*----------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------*/
+/* Shared */
+/*----------------------------------------------------------------------*/
+.left-nav {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+
+  height: 100vh;
+
+  padding: var(--padding-y-axis) var(--padding-x-axis) var(--padding-y-axis)
+    var(--padding-x-axis);
+}
+
+/*----------------------------------------------------------------------*/
 /* Collapsed */
+/*----------------------------------------------------------------------*/
 #nav-collapsed {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    left: 0;
-    position: absolute;
-    top: 0;
-    z-index: 1000;
+  align-items: center;
+  left: 0;
+  z-index: 1000;
 
-    height: 100vh;
-    width: var(--navbar-collapsed-width, 60px);
+  width: var(--navbar-collapsed-size, 60px);
 
-    padding: 10px;
-    padding-bottom: 2rem;
-    padding-top: 2rem;
-
-    background-color:var(--secondary-background-color);
-    border-right: 1px solid black;
+  background-color: var(--secondary-background-color);
 }
 
-nav a {
-    align-items: center;
-    display: flex;
-    justify-content: center;
+#nav-collapsed a {
+  align-items: center;
+  display: flex;
+  justify-content: center;
 
-    height: 40px;
-    width: 40px;
+  height: calc(var(--navbar-collapsed-size) - (var(--padding-x-axis) * 2));
+  width: calc(var(--navbar-collapsed-size) - (var(--padding-x-axis) * 2));
 
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
-nav img {
-    height: 75%;
-    width: 75%;
+#nav-collapsed a img {
+  height: 75%;
+  width: 75%;
 
-    transition: 
-        width 0.5s ease-out, 
-        height 0.2s ease-in;
+  transition: width 0.5s ease-out, height 0.2s ease-in;
 }
 
-nav a:hover img {
-    height: 100%;
-    width: 100%;
+#nav-collapsed a:hover img {
+  height: 100%;
+  width: 100%;
 }
 
-/* Expanded */
+/*----------------------------------------------------------------------*/
+/* Expansion */
+/*----------------------------------------------------------------------*/
 #nav-expanded {
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    left: var(--navbar-collapsed-width);
-    position: absolute;
-    top: 0;
-    z-index: 999;
+  justify-content: left;
+  left: var(--navbar-collapsed-size);
+  z-index: 999;
 
-    height: 100vh;
-    width: 200px;
+  width: fit-content;
 
-    background-color: rgb(255, 231, 94);    
-    border-right: 1px solid var(--secondary-color);
+  padding-right: 50px;
 
-    padding: 10px;
-    padding-bottom: 2rem;
-    padding-top: 2rem;
+  color: var(--primary-color);
+  background-color: var(--primary-background-color);
+  border-right: 1px solid var(--secondary-background-color);
+  box-shadow: 1px 0px 5px 0px rgb(255, 217, 0);
 
-    transition: left 0.5s ease-out;
+  transition: transform 0.5s ease-out;
+  transform: translateX(0);
 }
 
 #nav-expanded.hidden {
-    left: -200px /* slides into view */
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-in;
 }
+
+.nav-title a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  height: calc(var(--navbar-collapsed-size) - (var(--padding-x-axis) * 2));
+
+  margin-bottom: 1rem;
+}
+
+/* Refactor */

@@ -1,4 +1,4 @@
-const homeButtonId = "nav-home";
+const homeButtonId = "nav-home-button";
 const collapseID = "nav-expanded";
 const contentContainerId = "content-container";
 
