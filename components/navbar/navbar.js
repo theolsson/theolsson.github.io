@@ -1,45 +1,45 @@
-const homeButtonId = "nav-home-button";
-const collapseID = "nav-expanded";
+const homeBtnId = "nav-btn-home";
+const expansionId = "nav-expansion-labels";
 const contentContainerId = "content-container";
 
-const contentContainerElem = document.getElementById("content-container");
+const contentContainerElem = document.getElementById(contentContainerId);
 let homeButtonElem;
 let collapsableElem;
 
-let navbarCollapsed = true;
-const navbarCollapsedClass = "hidden";
+let navCollapsed = true;
+const navCollapsedClass = "nav__expansion--hidden";
+const outsideClickCollapseTrigger = () => {
+  expandedElem.classList.add(navCollapsedClass);
+  navCollapsed = true;
+  
+  contentContainerElem.removeEventListener("click", outsideClickCollapseTrigger);
+
+  console.log("Content collapse trigger set " + navCollapsed);
+};
+
 
 async function initNavbar() {
-  homeButtonElem = document.getElementById(homeButtonId);
-  expandedElem = document.getElementById(collapseID);
+  homeButtonElem = document.getElementById(homeBtnId);
+  expandedElem = document.getElementById(expansionId);
 
   expansionToggleListener();
 }
 
 function expansionToggleListener() {
   homeButtonElem.addEventListener("click", () => {
-    expandedElem.classList.toggle(navbarCollapsedClass);
-    navbarCollapsed = !navbarCollapsed;
+    expandedElem.classList.toggle(navCollapsedClass);
+    navCollapsed = !navCollapsed;
 
-    console.log("home trigger set to " + navbarCollapsed);
+    console.log("home trigger set to " + navCollapsed);
     secondaryCollapseListener();
   });
 }
 
-const collapseEvent = () => {
-  expandedElem.classList.add(navbarCollapsedClass);
-  navbarCollapsed = true;
-  
-  contentContainerElem.removeEventListener("click", collapseEvent);
-
-  console.log("Content collapse trigger set " + navbarCollapsed);
-};
-
 function secondaryCollapseListener() {
-  if (!navbarCollapsed) {
-    contentContainerElem.addEventListener("click", collapseEvent);
+  if (!navCollapsed) {
+    contentContainerElem.addEventListener("click", outsideClickCollapseTrigger);
   }
-  if (navbarCollapsed) {
-    contentContainerElem.removeEventListener("click", collapseEvent);
+  if (navCollapsed) {
+    contentContainerElem.removeEventListener("click", outsideClickCollapseTrigger);
   }
 }
