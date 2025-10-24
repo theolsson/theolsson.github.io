@@ -96,7 +96,7 @@ function initCarouselControl() {
  * @returns {boolean}
  */
 function canScroll(carouselElems, triggerElem) {
-  if (triggerElem === btnNavUpElem) {
+  if (triggerElem === btnNavDownElem) {
     return (
       carouselElems[0].querySelectorAll("li").length > carouselModuleSlots &&
       carouselElems[0]
@@ -104,7 +104,7 @@ function canScroll(carouselElems, triggerElem) {
         .classList.contains(carouselBottomOverflowClass)
     );
   }
-  if (triggerElem === btnNavDownElem) {
+  if (triggerElem === btnNavUpElem) {
     return (
       carouselElems[0].querySelectorAll("li").length > carouselModuleSlots &&
       carouselElems[0]
@@ -149,7 +149,7 @@ function carouselScrollListeners() {
  * @param {HTMLElement} triggerElem - The button trigger
  */
 function scrollCarousel(carouselElems, triggerElem) {
-  const moveDown = triggerElem === btnNavDownElem;
+  const moveDown = triggerElem === btnNavUpElem;
 
   const carouselFirstPosition = 2;
   const carouselLastPosition = carouselModuleSlots + 1;

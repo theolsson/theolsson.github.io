@@ -37,6 +37,7 @@ nav {
 /*----------------------------------------------------------------------*/
 .nav__sidebar,
 .nav__expansion {
+  align-items: center;
   display: grid;
   grid-template-rows:
     calc(var(--navbar-icon-square-side) + 0.5rem)
@@ -44,17 +45,18 @@ nav {
     calc(var(--navbar-icon-square-side) * 6)
     calc(var(--navbar-arrow-height) + 0.5rem);
   position: absolute;
+
   height: 100vh;
 }
 
-.nav__sidebar {  
+.nav__sidebar {
   grid-template-columns: var(--navbar-icon-square-side);
 }
 
 .nav__carousel {
+  align-items: center;
   display: grid;
   grid-template-rows: 0 repeat(3, calc(var(--navbar-icon-square-side) * 2)) 0;
-  align-items: center;
   overflow: hidden;
 }
 
@@ -96,15 +98,17 @@ nav {
 }
 
 .nav__arrow {
-  padding-top: 0.5rem;
-  height: var(--navbar-arrow-height);
-  transition: all 0.2s ease;
+  align-items: flex-end;
+  display: flex;
+  justify-content: center;
 }
-.nav__arrow:hover {
-  padding-top: 0;
-  padding-bottom: 0.5rem;
 
-  transition: all 0.3s ease;
+.nav__arrow img {
+  transition: transform 0.3s ease;
+}
+
+.nav__arrow:hover img {
+  transform: translateY(-50%);
 }
 
 .nav__arrow--down {
