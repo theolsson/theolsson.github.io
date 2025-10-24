@@ -1,46 +1,144 @@
-/* Collapsed */
-nav{
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    left: 0;
-    position: absolute;
-    top: 0;
-    z-index: 1000;
-
-    height: 100vh;
-    width: var(--navbar-collapsed-width, 60px);
-
-    padding: 10px;
-    padding-bottom: 2rem;
-    padding-top: 2rem;
-
-    background-color:var(--secondary-background-color);
+/*----------------------------------------------------------------------*/
+/*                            Nav variables                             */
+/*----------------------------------------------------------------------*/
+nav {
+  --navbar-padding-y-axis: 20px;
+  --navbar-padding-x-axis: 10px;
+  --navbar-arrow-height: calc(24px + 0.5rem);
+  --navbar-icon-square-side: 40px;
 }
 
-nav a {
-    align-items: center;
-    display: flex;
-    justify-content: center;
+/*----------------------------------------------------------------------*/
+/*                         Default style reset                          */
+/*----------------------------------------------------------------------*/
+.nav__default-style-reset button {
+  padding: 0;
+  margin: 0;
 
-    height: 40px;
-    width: 40px;
-
-    margin-bottom: 1rem;
+  border: none;
+  color: inherit;
+  background-color: inherit;
 }
 
-nav img {
-    height: 75%;
-    width: 75%;
+.nav__default-style-reset ul {
+  padding: 0;
+  margin: 0;
 
-    transition: 
-        width 0.5s ease-out, 
-        height 0.2s ease-in;
+  list-style-type: none;
 }
 
-nav a:hover img {
-    height: 100%;
-    width: 100%;
+.nav__default-style-reset li,
+.nav__default-style-reset p {
+  margin: 0;
 }
 
-/* Expanded */
+/*----------------------------------------------------------------------*/
+/*                      Alignment grid + carousel                       */
+/*----------------------------------------------------------------------*/
+.nav__sidebar,
+.nav__expansion {
+  align-items: center;
+  display: grid;
+  grid-template-rows:
+    calc(var(--navbar-icon-square-side) + 0.5rem)
+    calc(var(--navbar-arrow-height) + 0.5rem)
+    calc(var(--navbar-icon-square-side) * 6)
+    calc(var(--navbar-arrow-height) + 0.5rem);
+  position: absolute;
+
+  height: 100vh;
+}
+
+.nav__sidebar {
+  grid-template-columns: var(--navbar-icon-square-side);
+}
+
+.nav__carousel {
+  align-items: center;
+  display: grid;
+  grid-template-rows: 0 repeat(3, calc(var(--navbar-icon-square-side) * 2)) 0;
+  overflow: hidden;
+}
+
+.nav__carousel--top-hidden {
+  grid-row: 1;
+  visibility: hidden;
+}
+
+.nav__carousel--bottom-hidden {
+  grid-row: -1;
+  visibility: hidden;
+}
+
+/*----------------------------------------------------------------------*/
+/*                               Sidebar                                */
+/*----------------------------------------------------------------------*/
+.nav__sidebar {
+  z-index: 1000;
+
+  width: var(--navbar-collapsed-size, 60px);
+
+  padding: var(--navbar-padding-y-axis) var(--navbar-padding-x-axis)
+    var(--navbar-padding-y-axis) var(--navbar-padding-x-axis);
+
+  background-color: var(--secondary-background-color);
+}
+
+.nav__icon {
+  margin-block: 0.5rem;
+}
+
+.nav__icon img {
+  transform: scale(0.8);
+  transition: transform 0.3s ease-out;
+}
+
+.nav__icon:hover img {
+  transform: scale(1);
+}
+
+.nav__arrow {
+  align-items: flex-end;
+  display: flex;
+  justify-content: center;
+}
+
+.nav__arrow img {
+  transition: transform 0.3s ease;
+}
+
+.nav__arrow:hover img {
+  transform: translateY(-50%);
+}
+
+.nav__arrow--down {
+  transform: rotate(180deg);
+}
+
+.nav__arrow--down img {
+  filter: invert();
+}
+
+/*----------------------------------------------------------------------*/
+/*                              Expansion                               */
+/*----------------------------------------------------------------------*/
+.nav__expansion {
+  left: var(--navbar-collapsed-size);
+  z-index: 999;
+
+  padding: var(--navbar-padding-y-axis) 50px var(--navbar-padding-y-axis)
+    var(--navbar-padding-x-axis);
+
+  color: var(--primary-color);
+  background-color: var(--primary-background-color);
+  border-right: 1px solid var(--secondary-background-color);
+  box-shadow: 1px 0px 5px 0px rgb(255, 217, 0);
+
+  transition: transform 0.5s ease-out;
+  transform: translateX(0);
+}
+
+.nav__expansion--hidden {
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-in;
+}

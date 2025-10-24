@@ -1,10 +1,79 @@
-<nav>
-    <div id="nav-collapsed">
-    <a href="" id="nav-home">
-        <img src="components/navbar/icons/icon-list.png">
-    </a>
-    </div>    
-    <div id="nav-expansion">
-        <a href=""></a>
-    </div>
+<nav class="nav__default-style-reset">
+  <div class="nav__sidebar">
+    <ul>
+      <li>
+        <button id="nav-btn-home" class="nav__icon">
+          <img src="components/navbar/icons/icon-list.png" />
+        </button>
+      </li>
+    </ul>
+
+    <button id="nav-btn-up" class="nav__arrow">
+      <img src="components/navbar/icons/arrow-up.png" />
+    </button>
+
+    <ul class="nav__carousel">
+      <li style="transform: rotate(0deg)">
+        <button class="nav__icon">
+          <img src="shared/icons/wip.png" />
+        </button>
+      </li>
+      <li style="transform: rotate(90deg)">
+        <button class="nav__icon">
+          <img src="shared/icons/wip.png" />
+        </button>
+      </li>
+      <li style="transform: rotate(180deg)">
+        <button class="nav__icon">
+          <img src="shared/icons/wip.png" />
+        </button>
+      </li>
+      <li style="transform: rotate(270deg)">
+        <button class="nav__icon">
+          <img src="shared/icons/wip.png" />
+        </button>
+      </li>
+    </ul>
+
+    <button id="nav-btn-down" class="nav__arrow nav__arrow--down">
+      <img src="components/navbar/icons/arrow-up.png" />
+    </button>
+  </div>
+
+  <div id="nav-expansion" class="nav__expansion nav__expansion nav__expansion--hidden">
+    <ul>
+      <li>
+        <button>
+          <p>Home</p>
+        </button>
+      </li>
+    </ul>
+
+    <p>------------------------------------</p>
+
+    <ul class="nav__carousel">
+      <li>
+        <button>
+          <p>WIP 1</p>
+        </button>
+      </li>
+      <li>
+        <button>
+          <p>WIP 2</p>
+        </button>
+      </li>
+      <li>
+        <button>
+          <p>WIP 3</p>
+        </button>
+      </li>
+      <li>
+        <button>
+          <p>WIP 4 (text for width change to fit content check)</p>
+        </button>
+      </li>
+    </ul>
+
+    <p>------------------------------------</p>
+  </div>
 </nav>

@@ -1,6 +1,6 @@
 #content-container{
     padding: 2rem;
-    margin-left: var(--navbar-collapsed-width, 60px);
+    margin-left: var(--navbar-collapsed-size, 60px);
     min-height: 100vh;
 
     background-color: var(--primary-background-color);
