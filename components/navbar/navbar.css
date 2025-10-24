@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------*/
-/* Local variables */
+/*                            Nav variables                             */
 /*----------------------------------------------------------------------*/
 nav {
   --navbar-padding-y-axis: 20px;
@@ -9,7 +9,7 @@ nav {
 }
 
 /*----------------------------------------------------------------------*/
-/* Tag style resets */
+/*                         Default style reset                          */
 /*----------------------------------------------------------------------*/
 .nav__default-style-reset button {
   padding: 0;
@@ -33,7 +33,7 @@ nav {
 }
 
 /*----------------------------------------------------------------------*/
-/* Grid */
+/*                      Alignment grid + carousel                       */
 /*----------------------------------------------------------------------*/
 .nav__sidebar,
 .nav__expansion {
@@ -43,13 +43,33 @@ nav {
     calc(var(--navbar-arrow-height) + 0.5rem)
     calc(var(--navbar-icon-square-side) * 6)
     calc(var(--navbar-arrow-height) + 0.5rem);
-  grid-template-columns: var(--navbar-icon-square-side);
   position: absolute;
   height: 100vh;
 }
 
+.nav__sidebar {  
+  grid-template-columns: var(--navbar-icon-square-side);
+}
+
+.nav__carousel {
+  display: grid;
+  grid-template-rows: 0 repeat(3, calc(var(--navbar-icon-square-side) * 2)) 0;
+  align-items: center;
+  overflow: hidden;
+}
+
+.nav__carousel--top-hidden {
+  grid-row: 1;
+  visibility: hidden;
+}
+
+.nav__carousel--bottom-hidden {
+  grid-row: -1;
+  visibility: hidden;
+}
+
 /*----------------------------------------------------------------------*/
-/* Sidebar */
+/*                               Sidebar                                */
 /*----------------------------------------------------------------------*/
 .nav__sidebar {
   z-index: 1000;
@@ -96,7 +116,7 @@ nav {
 }
 
 /*----------------------------------------------------------------------*/
-/* Expansion */
+/*                              Expansion                               */
 /*----------------------------------------------------------------------*/
 .nav__expansion {
   left: var(--navbar-collapsed-size);
@@ -117,24 +137,4 @@ nav {
 .nav__expansion--hidden {
   transform: translateX(-100%);
   transition: transform 0.5s ease-in;
-}
-
-/*----------------------------------------------------------------------*/
-/* WIP AREA */
-/*----------------------------------------------------------------------*/
-.nav__carousel {
-  display: grid;
-  grid-template-rows: 0 repeat(3, calc(var(--navbar-icon-square-side) * 2)) 0;
-  align-items: center;
-  overflow: hidden;
-}
-
-.nav__carousel--top-hidden {
-  grid-row: 1;
-  visibility: hidden;
-}
-
-.nav__carousel--bottom-hidden {
-  grid-row: -1;
-  visibility: hidden;
 }
