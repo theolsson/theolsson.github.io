@@ -1,52 +1,64 @@
+/* Element Id's*/
 const homeBtnId = "nav-btn-home";
-const expansionId = "nav-expansion-labels";
+const navExpansionId = "nav-expansion-labels";
 const contentContainerId = "content-container";
 
-const contentContainerElem = document.getElementById(contentContainerId);
-let homeButtonElem;
-let expandedElem;
-
-let navCollapsedState = true;
+/* Element Classes */
 const navCollapsedClass = "nav__expansion--hidden";
-const outsideClickCollapseTrigger = () => {
-  expandedElem.classList.add(navCollapsedClass);
-  navCollapsedState = true;
 
-  contentContainerElem.removeEventListener(
-    "click",
-    outsideClickCollapseTrigger
-  );
+/* Elements */
+const contentContainerElem = document.getElementById(contentContainerId);
+let homeBtnElem;
+let navExpansionElem;
 
-  console.log("Content collapse trigger set " + navCollapsedState);
+/* Cheks booleans */
+let navIsCollapsed = true;
+
+/**
+ * Logic for {@link addSecondaryNavbarCollapser}
+ */
+const collapseFromContainer = () => {
+  navExpansionElem.classList.add(navCollapsedClass);
+  navIsCollapsed = true;
+
+  contentContainerElem.removeEventListener("click", collapseFromContainer);
 };
 
-async function initNavbar() {
-  homeButtonElem = document.getElementById(homeBtnId);
-  expandedElem = document.getElementById(expansionId);
+/**
+ * Initiate component on load
+ */
+function initNavbar() {
+  homeBtnElem = document.getElementById(homeBtnId);
+  navExpansionElem = document.getElementById(navExpansionId);
 
-  expansionToggleListener();
+  initNavbarExpansionControl();
   initCarousel();
 }
 
-function expansionToggleListener() {
-  homeButtonElem.addEventListener("click", () => {
-    expandedElem.classList.toggle(navCollapsedClass);
-    navCollapsedState = !navCollapsedState;
+/**
+ * Initiate event listener controlling
+ * {@link navExpansionElem} state with {@link homeBtnElem}
+ */
+function initNavbarExpansionControl() {
+  homeBtnElem.addEventListener("click", () => {
+    navExpansionElem.classList.toggle(navCollapsedClass);
+    navIsCollapsed = !navIsCollapsed;
 
-    console.log("home trigger set to " + navCollapsedState);
-    secondaryCollapseListener();
+    console.log("home trigger set to " + navIsCollapsed);
+    addSecondaryNavbarCollapser();
   });
 }
 
-function secondaryCollapseListener() {
-  if (!navCollapsedState) {
-    contentContainerElem.addEventListener("click", outsideClickCollapseTrigger);
+/**
+ * Adds event listener to collapse
+ * {@link navExpansionElem} from {@link contentContainerElem}
+ */
+function addSecondaryNavbarCollapser() {
+  if (!navIsCollapsed) {
+    contentContainerElem.addEventListener("click", collapseFromContainer);
   }
-  if (navCollapsedState) {
-    contentContainerElem.removeEventListener(
-      "click",
-      outsideClickCollapseTrigger
-    );
+  if (navIsCollapsed) {
+    contentContainerElem.removeEventListener("click", collapseFromContainer);
   }
 }
 
@@ -57,13 +69,13 @@ function secondaryCollapseListener() {
 const btnNavUpID = "nav-btn-up";
 const btnNavDownId = "nav-btn-down";
 
-const carouselTopHidden = "nav__carousel--top-hidden";
-const carouselBottomHidden = "nav__carousel--bottom-hidden";
+const carouselTopOverflowClass = "nav__carousel--top-hidden";
+const carouselBottomOverflowClass = "nav__carousel--bottom-hidden";
 
 let btnNavUpElem;
 let btnNavDownElem;
 
-const availableSpaces = 3;
+const moduleSpaces = 3;
 
 function initCarousel() {
   btnNavDownElem = document.getElementById(btnNavDownId);
@@ -73,15 +85,56 @@ function initCarousel() {
     const liElems = ul.querySelectorAll("li");
 
     liElems.forEach((li, index) => {
-      if (index < availableSpaces) {
-        li.style.gridRow = (index + availableSpaces - 1).toString();
+      if (index < moduleSpaces) {
+        li.style.gridRow = (index + moduleSpaces - 1).toString();
       } else {
-        li.classList.add(carouselBottomHidden);
+        li.classList.add(carouselBottomOverflowClass);
       }
     });
   });
 
   initBtnUp();
+  initBtnDown();
+}
+
+/*BUTTON DOWN*/
+function initBtnDown() {
+  btnNavDownElem = document.getElementById(btnNavDownId);
+  const carouselElems = document.querySelectorAll(".nav__carousel");
+
+  btnNavDownElem.addEventListener("click", () => {
+    if (canScroll(carouselElems, btnNavDownElem))
+      carouselDown(carouselElems, btnNavDownElem);
+  });
+}
+
+function carouselDown(carouselElems, triggerElem) {
+  console.log("Carousel down triggered");
+  carouselElems.forEach((ul) => {
+    const lis = ul.querySelectorAll("li");
+    let bottomSet = false;
+
+    if (triggerElem === btnNavDownElem) {
+      for (let i = moduleSpaces; i => 0; i--) {
+        console.log("reverse looping: " + 1);
+
+        if (!lis[i].classList.contains(carouselBottomOverflowClass)) {
+          lis[i].style.gridRow =
+            (parseInt(lis[i].style.gridRow) || lis.length + 1) + 1;
+          if (!bottomSet) {
+            lis[i].classList.add(carouselBottomOverflowClass);
+            bottomSet = true;
+          }
+        }
+
+        if (lis[i].classList.contains(carouselTopOverflowClass)) {
+          lis[i].classList.remove(carouselTopOverflowClass);
+          lis[i].style.gridRow = 2;
+          break;
+        }
+      }
+    }
+  });
 }
 
 function initBtnUp() {
@@ -89,26 +142,26 @@ function initBtnUp() {
   const carouselElems = document.querySelectorAll(".nav__carousel");
 
   btnNavUpElem.addEventListener("click", () => {
-    if (!canScrollDown(carouselElems)) {
-      console.log("Cannot scroll down anymore");
-      return;
-    }
+    if (!canScroll(carouselElems, btnNavUpElem)) return;
+
     carouselElems.forEach((ul) => {
       const lis = ul.querySelectorAll("li");
       let topSet = false;
 
-      for (let i = 0; i < availableSpaces + 1; i++) {
+      for (let i = 0; i < moduleSpaces + 1; i++) {
         console.log("loop " + i);
 
-        if (!lis[i].classList.contains(carouselTopHidden)) {
-          lis[i].style.gridRow = lis[i].style.gridRow - 1;
+        if (!lis[i].classList.contains(carouselTopOverflowClass)) {
+          lis[i].style.gridRow = (parseInt(lis[i].style.gridRow) || 1) - 1;
 
-          if (!topSet) lis[i].classList.add(carouselTopHidden);
-          topSet = true;
+          if (!topSet) {
+            lis[i].classList.add(carouselTopOverflowClass);
+            topSet = true;
+          }
         }
 
-        if (lis[i].classList.contains(carouselBottomHidden)) {
-          lis[i].classList.remove(carouselBottomHidden);
+        if (lis[i].classList.contains(carouselBottomOverflowClass)) {
+          lis[i].classList.remove(carouselBottomOverflowClass);
           lis[i].style.gridRow = 4;
           break;
         }
@@ -117,11 +170,21 @@ function initBtnUp() {
   });
 }
 
-function canScrollDown(ulElems) {
-  return (
-    ulElems[0].querySelectorAll("li").length > availableSpaces &&
-    ulElems[0]
-      .querySelector("ul li:last-child")
-      .classList.contains(carouselBottomHidden)
-  );
+function canScroll(ulElems, triggerElem) {
+  if (triggerElem === btnNavUpElem) {
+    return (
+      ulElems[0].querySelectorAll("li").length > moduleSpaces &&
+      ulElems[0]
+        .querySelector("ul li:last-child")
+        .classList.contains(carouselBottomOverflowClass)
+    );
+  }
+  if (triggerElem === btnNavDownElem) {
+    return (
+      ulElems[0].querySelectorAll("li").length > moduleSpaces &&
+      ulElems[0]
+        .querySelector("ul li:first-child")
+        .classList.contains(carouselTopOverflowClass)
+    );
+  }
 }
