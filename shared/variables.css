@@ -1,11 +1,20 @@
-:root{
-    /* Sizes */
-    --navbar-collapsed-size: 60px;
+:root {
+  /* Breakpoints */
+  /*
+  --sm: 576px;
+  --md: 768px;
+  --lg: 992px;
+  --xl: 1200px;
+  --xxl: 1400px;
+  */
 
-    /* Colors */
-    --primary-background-color: black;
-    --secondary-background-color: gold;
-    
-    --primary-color: white;
-    --secondary-color: black;
+  /* Fixed sizes */
+  --navbar-collapsed-size: 60px;
+
+  /* Colors */
+  --primary-background-color: black;
+  --secondary-background-color: gold;
+
+  --primary-color: white;
+  --secondary-color: black;
 }
