@@ -186,29 +186,27 @@ function scrollCarousel(carouselElems, triggerElem) {
       if (!li.classList.contains(carouselHiddenPositionClass) || overflowSet) {
         switch (counter) {
           case 0:
-            console.log(counter);
             li.classList.remove(firstPos);
             li.classList.add(carouselHiddenPositionClass);
             overflowSet = true;
             break;
+
           case 1:
-            console.log(counter);
             li.classList.remove(secondPos);
             li.classList.add(firstPos);
             break;
+
           case 2:
-            console.log(counter);
             li.classList.remove(thirdPos);
             li.classList.add(secondPos);
             break;
+
           case 3:
-            console.log(counter);
             li.classList.remove(carouselHiddenPositionClass);
             li.classList.add(thirdPos);
             break;
         }
       }
-      console.log(overflowSet);
 
       if (overflowSet) counter++;
 
