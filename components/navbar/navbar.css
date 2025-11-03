@@ -2,27 +2,28 @@
 /*                            Nav variables                             */
 /*----------------------------------------------------------------------*/
 nav {
-  --navbar-padding-y-axis: 20px;
-  --navbar-padding-x-axis: 10px;
-  --navbar-arrow-height: calc(24px + 0.5rem);
-  --navbar-icon-square-side: 40px;
+  --navbar-arrow-height: 24px; /* Height of arrow icon in pointing direction */
+  --navbar-icon-size: 40px; /* Length of side on sqyare shortcut icons */
+
+  --navbar-padding-short: 20px; /* Padding along the short side of shortcuts*/
+  --navbar-padding-long: 10px; /* Padding along the long side of shortcuts */
 }
 
 /*----------------------------------------------------------------------*/
 /*                         Default style reset                          */
 /*----------------------------------------------------------------------*/
 .nav__default-style-reset button {
-  padding: 0;
   margin: 0;
+  padding: 0;
 
+  background-color: inherit;
   border: none;
   color: inherit;
-  background-color: inherit;
 }
 
 .nav__default-style-reset ul {
-  padding: 0;
   margin: 0;
+  padding: 0;
 
   list-style-type: none;
 }
@@ -33,112 +34,199 @@ nav {
 }
 
 /*----------------------------------------------------------------------*/
-/*                      Alignment grid + carousel                       */
+/*                       No transition on resize                        */
 /*----------------------------------------------------------------------*/
-.nav__sidebar,
+#navbar-container.transitions--disabled * {
+  transition: none !important;
+}
+
+/*----------------------------------------------------------------------*/
+/*                           Alignment grid                             */
+/*----------------------------------------------------------------------*/
+.nav__shortcuts,
 .nav__expansion {
   align-items: center;
   display: grid;
-  grid-template-rows:
-    calc(var(--navbar-icon-square-side) + 0.5rem)
-    calc(var(--navbar-arrow-height) + 0.5rem)
-    calc(var(--navbar-icon-square-side) * 6)
-    calc(var(--navbar-arrow-height) + 0.5rem);
   position: absolute;
+  grid-template-columns:
+    minmax(var(--navbar-icon-size), calc(var(--navbar-icon-size) * 1.5))
+    minmax(var(--navbar-arrow-height), calc(var(--navbar-arrow-height) * 1.5))
+    minmax(calc(var(--navbar-icon-size) * 3), calc(var(--navbar-icon-size) * 5))
+    minmax(var(--navbar-arrow-height), calc(var(--navbar-arrow-height) * 1.5));
 
-  height: 100vh;
+  width: 100vw;
 }
 
-.nav__sidebar {
-  grid-template-columns: var(--navbar-icon-square-side);
+@media (min-width: 769px) {
+  .nav__shortcuts,
+  .nav__expansion {
+    grid-template-columns: unset;
+    grid-template-rows:
+      calc(var(--navbar-icon-size) * 1.5)
+      calc(var(--navbar-arrow-height) * 1.5)
+      calc(var(--navbar-icon-size) * 5)
+      calc(var(--navbar-arrow-height) * 1.5);
+
+    height: 100vh;
+    width: unset;
+  }
 }
 
+/*----------------------------------------------------------------------*/
+/*                              Carousel                                */
+/*----------------------------------------------------------------------*/
 .nav__carousel {
   align-items: center;
   display: grid;
-  grid-template-rows: 0 repeat(3, calc(var(--navbar-icon-square-side) * 2)) 0;
+  grid-template-columns: 0 repeat(3, 1fr);
+  grid-template-rows: 60px;/* TODO: change to accomodate expansion height with full small screen functionality */
+  justify-items: center;
   overflow: hidden;
 }
-
-.nav__carousel--top-hidden {
+.nav__carousel--hidden {
+  visibility: hidden;
+  grid-column: 1;
   grid-row: 1;
-  visibility: hidden;
 }
 
-.nav__carousel--bottom-hidden {
-  grid-row: -2;
-  visibility: hidden;
+.nav__carousel--first {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.nav__carousel--second {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.nav__carousel--third {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+@media (min-width: 769px) {
+  .nav__carousel {
+    align-items: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0 repeat(3, calc(var(--navbar-icon-size) * 1.5));
+    justify-items: left;
+  }
+
+  .nav__carousel--first {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .nav__carousel--second {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .nav__carousel--third {
+    grid-column: 1;
+    grid-row: 4;
+  }
 }
 
 /*----------------------------------------------------------------------*/
-/*                               Sidebar                                */
+/*                              Shortcuts                               */
 /*----------------------------------------------------------------------*/
-.nav__sidebar {
+.nav__shortcuts {
   z-index: 1000;
 
-  width: var(--navbar-collapsed-size, 60px);
+  height: var(--navbar-collapsed-size, 60px);
 
-  padding: var(--navbar-padding-y-axis) var(--navbar-padding-x-axis)
-    var(--navbar-padding-y-axis) var(--navbar-padding-x-axis);
+  padding: var(--navbar-padding-long) var(--navbar-padding-short);
 
   background-color: var(--secondary-background-color);
 }
 
-.nav__icon {
-  margin-block: 0.5rem;
+@media (min-width: 769px) {
+  .nav__shortcuts {
+    height: 100vh;
+    width: var(--navbar-collapsed-size, 60px);
+
+    padding: var(--navbar-padding-short) var(--navbar-padding-long);
+  }
 }
 
-.nav__icon img {
-  transform: scale(0.8);
-  transition: transform 0.3s ease-out;
+@media (min-width: 769px) {
+  .nav__icon img {
+    transform: scale(0.8);
+    transition: transform 0.3s ease-out;
+  }
+
+  .nav__icon:hover img {
+    transform: scale(1);
+  }
 }
 
-.nav__icon:hover img {
-  transform: scale(1);
-}
-
-.nav__arrow {
-  align-items: flex-end;
-  display: flex;
-  justify-content: center;
-}
-
-.nav__arrow img {
-  transition: transform 0.3s ease;
-}
-
-.nav__arrow:hover img {
-  transform: translateY(-50%);
-}
-
-.nav__arrow--down {
+.nav__arrow--reverse {
   transform: rotate(180deg);
 }
 
-.nav__arrow--down img {
+.nav__arrow--reverse img {
   filter: invert();
+}
+
+@media (max-width: 768px) {
+  .nav__arrow img {
+    transform: rotate(270deg);
+  }
+}
+
+@media (min-width: 769px) {
+  .nav__arrow {
+    align-items: flex-end;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav__arrow img {
+    transition: transform 0.3s ease;
+  }
+
+  .nav__arrow:hover img {
+    transform: translateY(-50%);
+  }
 }
 
 /*----------------------------------------------------------------------*/
 /*                              Expansion                               */
 /*----------------------------------------------------------------------*/
 .nav__expansion {
-  left: var(--navbar-collapsed-size);
   z-index: 999;
+  top: var(--navbar-collapsed-size);
 
-  padding: var(--navbar-padding-y-axis) 50px var(--navbar-padding-y-axis)
-    var(--navbar-padding-x-axis);
+  padding: var(--navbar-padding-long) var(--navbar-padding-short);
 
-  color: var(--primary-color);
   background-color: var(--primary-background-color);
-  border-right: 1px solid var(--secondary-background-color);
-  box-shadow: 1px 0px 5px 0px rgb(255, 217, 0);
+  border: 1px solid var(--secondary-background-color);
+  box-shadow: 0px 1px 5px 1px var(--secondary-background-color);
+  color: var(--primary-color);
 
   transition: transform 0.5s ease-out;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 .nav__expansion--hidden {
-  transform: translateX(-100%);
-  transition: transform 0.5s ease-in;
+  transform: translateY(-100%);
+}
+
+@media (min-width: 769px) {
+  .nav__expansion {
+    left: var(--navbar-collapsed-size);
+    top: unset;
+
+    padding: var(--navbar-padding-short) 50px var(--navbar-padding-short)
+      var(--navbar-padding-long);
+
+    box-shadow: 1px 0px 5px 1px var(--secondary-background-color);
+
+    transform: translateX(0);
+  }
+
+  .nav__expansion--hidden {
+    transform: translateX(-100%);
+  }
 }

@@ -1,19 +1,23 @@
+const navParentId = "navbar-container";
 const homeBtnId = "nav-btn-home";
 const navExpansionId = "nav-expansion";
-const contentContainerId = "content-container";
-const btnNavUpId = "nav-btn-up";
-const btnNavDownId = "nav-btn-down";
+const contentContainerId = "main-container";
+const btnNavPrevId = "nav-btn-prev";
+const btnNavNextId = "nav-btn-next";
 
 const navCollapsedClass = "nav__expansion--hidden";
-const carouselTopOverflowClass = "nav__carousel--top-hidden";
-const carouselBottomOverflowClass = "nav__carousel--bottom-hidden";
+const carouselFirstPositionClass = "nav__carousel--first";
+const carouselSecondPositionClass = "nav__carousel--second";
+const carouselThirdPositionClass = "nav__carousel--third";
+const carouselHiddenPositionClass = "nav__carousel--hidden";
 
 const contentContainerElem = document.getElementById(contentContainerId);
 let homeBtnElem;
 let navExpansionElem;
-let btnNavUpElem;
-let btnNavDownElem;
+let btnNavPrevElem;
+let btnNavNextElem;
 
+const maxWidthQuery = window.matchMedia("(max-width: 768px)");
 let navIsCollapsed = true;
 
 const carouselModuleSlots = 3;
@@ -27,6 +31,33 @@ function initNavbar() {
 
   initNavbarCollapseControl();
   initCarouselControl();
+
+  handleBreakpointChange();
+}
+
+function handleBreakpointChange() {
+  maxWidthQuery.addEventListener("change", changeE => {
+
+    const navParentElem = document.getElementById(navParentId);
+    if (!navParentElem) return;
+
+    navParentElem.classList.add('transitions--disabled');
+    void navParentElem.offsetHeight;
+
+    setTimeout(() => {
+      navParentElem.classList.remove('transitions--disabled');
+    }, 100);
+  });
+}
+
+/**
+ * Adds event listener to collapse
+ * {@link navExpansionElem} from {@link contentContainerElem}
+ */
+function collapseFromContainerClick() {
+  contentContainerElem[
+    navIsCollapsed ? "removeEventListener" : "addEventListener"
+  ]("click", collapseFromContainerClickLogic);
 }
 
 /**
@@ -40,16 +71,6 @@ function initNavbarCollapseControl() {
 
     collapseFromContainerClick();
   });
-}
-
-/**
- * Adds event listener to collapse
- * {@link navExpansionElem} from {@link contentContainerElem}
- */
-function collapseFromContainerClick() {
-  contentContainerElem[
-    navIsCollapsed ? "removeEventListener" : "addEventListener"
-  ]("click", collapseFromContainerClickLogic);
 }
 
 /**
@@ -72,17 +93,25 @@ const collapseFromContainerClickLogic = () => {
 function initCarouselControl() {
   carouselScrollListeners();
 
-  btnNavDownElem = document.getElementById(btnNavDownId);
   const carouselElems = document.querySelectorAll(".nav__carousel");
 
   carouselElems.forEach((ul) => {
     const liElems = ul.querySelectorAll("li");
 
     liElems.forEach((li, i) => {
-      if (i < carouselModuleSlots) {
-        li.style.gridRow = (i + carouselModuleSlots - 1).toString();
-      } else {
-        li.classList.add(carouselBottomOverflowClass);
+      switch (i) {
+        case 0:
+          li.classList.add(carouselFirstPositionClass);
+          break;
+        case 1:
+          li.classList.add(carouselSecondPositionClass);
+          break;
+        case 2:
+          li.classList.add(carouselThirdPositionClass);
+          break;
+        default:
+          li.classList.add(carouselHiddenPositionClass);
+          break;
       }
     });
   });
@@ -96,20 +125,23 @@ function initCarouselControl() {
  * @returns {boolean}
  */
 function canScroll(carouselElems, triggerElem) {
-  if (triggerElem === btnNavDownElem) {
+  const hasContentToScroll =
+    carouselElems[0].querySelectorAll("li").length > carouselModuleSlots;
+
+  if (triggerElem === btnNavNextElem) {
     return (
-      carouselElems[0].querySelectorAll("li").length > carouselModuleSlots &&
+      hasContentToScroll &&
       carouselElems[0]
-        .querySelector("ul li:last-child")
-        .classList.contains(carouselBottomOverflowClass)
+        .querySelector("li:last-child")
+        .classList.contains(carouselHiddenPositionClass)
     );
   }
-  if (triggerElem === btnNavUpElem) {
+  if (triggerElem === btnNavPrevElem) {
     return (
-      carouselElems[0].querySelectorAll("li").length > carouselModuleSlots &&
+      hasContentToScroll &&
       carouselElems[0]
-        .querySelector("ul li:first-child")
-        .classList.contains(carouselTopOverflowClass)
+        .querySelector("li:first-child")
+        .classList.contains(carouselHiddenPositionClass)
     );
   }
 
@@ -117,28 +149,26 @@ function canScroll(carouselElems, triggerElem) {
 }
 
 /**
- * Adds event listeners to {@link btnNavUpElem} and {@link btnNavDownElem}
+ * Adds event listeners to {@link btnNavPrevElem} and {@link btnNavNextElem}
  * to control all nav carousels in sync
  */
 function carouselScrollListeners() {
-  btnNavUpElem = document.getElementById(btnNavUpId);
-  btnNavDownElem = document.getElementById(btnNavDownId);
+  btnNavPrevElem = document.getElementById(btnNavPrevId);
+  btnNavNextElem = document.getElementById(btnNavNextId);
   const carouselElems = document.querySelectorAll(".nav__carousel");
 
-  btnNavUpElem.addEventListener("click", () => {
-    if (!canScroll(carouselElems, btnNavUpElem)) {
+  btnNavPrevElem.addEventListener("click", () => {
+    if (!canScroll(carouselElems, btnNavPrevElem)) {
       return;
     }
 
-    scrollCarousel(carouselElems, btnNavUpElem);
+    scrollCarousel(carouselElems, btnNavPrevElem);
   });
 
-  btnNavDownElem.addEventListener("click", () => {
-    if (!canScroll(carouselElems, btnNavDownElem)) {
-      return;
-    }
+  btnNavNextElem.addEventListener("click", () => {
+    if (!canScroll(carouselElems, btnNavNextElem)) return;
 
-    scrollCarousel(carouselElems, btnNavDownElem);
+    scrollCarousel(carouselElems, btnNavNextElem);
   });
 }
 
@@ -149,10 +179,7 @@ function carouselScrollListeners() {
  * @param {HTMLElement} triggerElem - The button trigger
  */
 function scrollCarousel(carouselElems, triggerElem) {
-  const moveDown = triggerElem === btnNavUpElem;
-
-  const carouselFirstPosition = 2;
-  const carouselLastPosition = carouselModuleSlots + 1;
+  const moveDown = triggerElem === btnNavPrevElem;
 
   carouselElems.forEach((ul) => {
     const liElems = ul.querySelectorAll("li");
@@ -161,37 +188,48 @@ function scrollCarousel(carouselElems, triggerElem) {
     const end = moveDown ? -1 : liElems.length;
     const step = moveDown ? -1 : 1;
 
-    const overflowClassToAdd = moveDown
-      ? carouselBottomOverflowClass
-      : carouselTopOverflowClass;
+    const firstPos = moveDown
+      ? carouselThirdPositionClass
+      : carouselFirstPositionClass;
+    const secondPos = carouselSecondPositionClass;
+    const thirdPos = moveDown
+      ? carouselFirstPositionClass
+      : carouselThirdPositionClass;
 
-    const overflowClassToRemove = moveDown
-      ? carouselTopOverflowClass
-      : carouselBottomOverflowClass;
-
-    const defaultGridRow = moveDown
-      ? carouselFirstPosition
-      : carouselLastPosition;
-
-    let overFlowSet = false;
+    let overflowSet = false;
+    let counter = 0;
 
     for (let i = start; i !== end; i += step) {
       const li = liElems[i];
 
-      if (!li.classList.contains(overflowClassToAdd)) {
-        li.style.gridRow = parseInt(li.style.gridRow) - step;
+      if (!li.classList.contains(carouselHiddenPositionClass) || overflowSet) {
+        switch (counter) {
+          case 0:
+            li.classList.remove(firstPos);
+            li.classList.add(carouselHiddenPositionClass);
+            overflowSet = true;
+            break;
 
-        if (!overFlowSet) {
-          li.classList.add(overflowClassToAdd);
-          overFlowSet = true;
+          case 1:
+            li.classList.remove(secondPos);
+            li.classList.add(firstPos);
+            break;
+
+          case 2:
+            li.classList.remove(thirdPos);
+            li.classList.add(secondPos);
+            break;
+
+          case 3:
+            li.classList.remove(carouselHiddenPositionClass);
+            li.classList.add(thirdPos);
+            break;
         }
       }
 
-      if (li.classList.contains(overflowClassToRemove)) {
-        li.classList.remove(overflowClassToRemove);
-        li.style.gridRow = defaultGridRow;
-        break;
-      }
+      if (overflowSet) counter++;
+
+      if (counter === carouselModuleSlots + 1) break;
     }
   });
 }
