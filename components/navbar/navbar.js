@@ -1,3 +1,4 @@
+const navParentId = "navbar-container";
 const homeBtnId = "nav-btn-home";
 const navExpansionId = "nav-expansion";
 const contentContainerId = "main-container";
@@ -16,6 +17,7 @@ let navExpansionElem;
 let btnNavPrevElem;
 let btnNavNextElem;
 
+const maxWidthQuery = window.matchMedia("(max-width: 768px)");
 let navIsCollapsed = true;
 
 const carouselModuleSlots = 3;
@@ -29,6 +31,23 @@ function initNavbar() {
 
   initNavbarCollapseControl();
   initCarouselControl();
+
+  handleBreakpointChange();
+}
+
+function handleBreakpointChange() {
+  maxWidthQuery.addEventListener("change", changeE => {
+
+    const navParentElem = document.getElementById(navParentId);
+    if (!navParentElem) return;
+
+    navParentElem.classList.add('transitions--disabled');
+    void navParentElem.offsetHeight;
+
+    setTimeout(() => {
+      navParentElem.classList.remove('transitions--disabled');
+    }, 100);
+  });
 }
 
 /**

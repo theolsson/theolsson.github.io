@@ -34,6 +34,13 @@ nav {
 }
 
 /*----------------------------------------------------------------------*/
+/*                       No transition on resize                        */
+/*----------------------------------------------------------------------*/
+#navbar-container.transitions--disabled * {
+  transition: none !important;
+}
+
+/*----------------------------------------------------------------------*/
 /*                           Alignment grid                             */
 /*----------------------------------------------------------------------*/
 .nav__shortcuts,
@@ -42,10 +49,10 @@ nav {
   display: grid;
   position: absolute;
   grid-template-columns:
-    calc(var(--navbar-icon-size) * 1.5)
-    calc(var(--navbar-arrow-height) * 1.5)
-    calc(var(--navbar-icon-size) * 5)
-    calc(var(--navbar-arrow-height) * 1.5);
+    minmax(var(--navbar-icon-size), calc(var(--navbar-icon-size) * 1.5))
+    minmax(var(--navbar-arrow-height), calc(var(--navbar-arrow-height) * 1.5))
+    minmax(calc(var(--navbar-icon-size) * 3), calc(var(--navbar-icon-size) * 5))
+    minmax(var(--navbar-arrow-height), calc(var(--navbar-arrow-height) * 1.5));
 
   width: 100vw;
 }
@@ -69,28 +76,31 @@ nav {
 /*                              Carousel                                */
 /*----------------------------------------------------------------------*/
 .nav__carousel {
+  align-items: center;
   display: grid;
-  grid-template-columns: repeat(3, 1fr) 0;
-  grid-template-rows: 1fr;
+  grid-template-columns: 0 repeat(3, 1fr);
+  grid-template-rows: 60px;/* TODO: change to accomodate expansion height with full small screen functionality */
   justify-items: center;
   overflow: hidden;
 }
 .nav__carousel--hidden {
-  display: none;
-}
-
-.nav__carousel--first {
+  visibility: hidden;
   grid-column: 1;
   grid-row: 1;
 }
 
-.nav__carousel--second {
+.nav__carousel--first {
   grid-column: 2;
   grid-row: 1;
 }
 
-.nav__carousel--third {
+.nav__carousel--second {
   grid-column: 3;
+  grid-row: 1;
+}
+
+.nav__carousel--third {
+  grid-column: 4;
   grid-row: 1;
 }
 
@@ -98,23 +108,23 @@ nav {
   .nav__carousel {
     align-items: center;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, calc(var(--navbar-icon-size) * 2));
+    grid-template-rows: 0 repeat(3, calc(var(--navbar-icon-size) * 1.5));
     justify-items: left;
   }
 
   .nav__carousel--first {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
   }
 
   .nav__carousel--second {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 3;
   }
 
   .nav__carousel--third {
     grid-column: 1;
-    grid-row: 3;
+    grid-row: 4;
   }
 }
 
@@ -187,6 +197,8 @@ nav {
 .nav__expansion {
   z-index: 999;
   top: var(--navbar-collapsed-size);
+
+  padding: var(--navbar-padding-long) var(--navbar-padding-short);
 
   background-color: var(--primary-background-color);
   border: 1px solid var(--secondary-background-color);
