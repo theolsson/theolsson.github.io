@@ -47,7 +47,7 @@ nav {
 .nav__expansion {
   align-items: center;
   display: grid;
-  position: absolute;
+  position: fixed;
   grid-template-columns:
     minmax(var(--navbar-icon-size), calc(var(--navbar-icon-size) * 1.5))
     minmax(var(--navbar-arrow-height), calc(var(--navbar-arrow-height) * 1.5))
