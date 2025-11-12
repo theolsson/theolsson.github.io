@@ -1,14 +1,162 @@
-# Theo's Sandbox
-This hobby project was started in October 2025 and my goal is to challenge myself to do more frontend, and especially to explore and solidify my CSS skills.
+<main>
+  <header>
+    <h1>Project: Theo's Sandbox</h1>
+  </header>
 
-This is an SPA where my goal is to load and unload modules as the user navigates using a navbar, with my aim to have a responsive design that works down to a 320px screen width.\
-The project to start will use plain HTML, CSS, and JavaScript, with the use of Bootstrap and a choice of framework being something for each individual module that will be added.
+  <section>
+    <h2>Purpose</h2>
+    <p>
+      This project is meant to showcase frontend modules I've developed - and
+      will develop - like a portfolio. It's a project I can work on in my free
+      time to inventory my current skills, starting with HTML, CSS, and
+      JavaScript, and later transitioning to frameworks
+    </p>
+    <p>
+      It's an SPA hosted on GitHub Pages which dynamically loads components with
+      navigation handled my my custom built navbar. Live version can be found
+      <a href="https://theolsson.github.io/" target="_blank">here</a>
+    </p>
+  </section>
 
-My goal is to use this as a sandbox to create whatever type of module I think would be fun, interesting, or challenging to make (hopefully each new mini project will be all three).\
-I intend to start with modules that run client side only but my plan is to find free APIs I find interesting and create modules with them.
+  <section>
+    <h2>Goals</h2>
+    <ul>
+      <li>
+        Develop modules with the aim to solidify my current and learn new skills
+      </li>
+      <li>
+        Have a responsive design that works down to a screen width of 320 pixels
+      </li>
+      <li>Have fun</li>
+    </ul>
+  </section>
 
-## Current features
-### Navbar
-The navbar has two positions based on screen width. Regardless of position it has a carousel to navigate between modules via their icons (_placeholders for now_), and an expandable area which displays module names (_placeholders for now_)
+  <section>
+    <h2>Current Features</h2>
+    <ul>
+      <li>
+        <h3>Loader</h3>
+        <p>
+          The core feature of this project, built to load components and modules
+        </p>
+        <p>
+          It is responsible for loading the navbar and home modules on startup
+          by fetching the html file an inserting it into index.html, as well as
+          creating and appending bth a link tag for the CSS file, and a script
+          tag for the JavaScript file.
+          <a
+            href="https://github.com/theolsson/theolsson.github.io/blob/main/shared/app.js"
+            target="_blank"
+            >Code in app.js
+          </a>
+        </p>
+      </li>
+      <li>
+        <h3>Navbar</h3>
+        <p>
+          The navbar has two positions based on screen width. Regardless of
+          position it has a carousel to navigate between modules via their
+          custom icons -
+          <span style="font-style: italic"> wip placeholders for now</span>
+          - and an expandable area which displays module names -
+          <span style="font-style: italic"> wip placeholders for now</span>
+        </p>
+        <p>
+          All assets, including the navbar design and interactions, are being
+          created from scratch by me, without the use of frameworks or
+          templates, relying instead on my own CSS and JavaScript skills to
+          build this first component.
+          <a
+            href="https://github.com/theolsson/theolsson.github.io/tree/main/components/navbar"
+            target="_blank"
+            >Code in components/navbar
+          </a>
+        </p>
+      </li>
+      <li>
+        <h3>Home page</h3>
+        <p>
+          A page to welcome visitors as well as explain the project. You are
+          currently here
+        </p>
+        <p>
+          This page has intentional minimal styling, as I intend to update it as
+          the project moves along - and it in itself is only meant to offer
+          information.
+          <a
+            href="https://github.com/theolsson/theolsson.github.io/tree/main/modules/home"
+            target="_blank"
+            >Code in modules/home
+          </a>
+        </p>
+      </li>
+    </ul>
+  </section>
 
-All assets in the navbar are and will continue to be made by myself, with no use of Bootstrap or other catalogues other than for inspiration
+  <section>
+    <h2>Future Features</h2>
+    <ul>
+      <li>
+        <h3>Minigames</h3>
+        <p>
+          I intend to make a series of minigames as their own modules. For
+          example I intend to develop a button clicker, tic tac toe, snake, and
+          pong modules
+        </p>
+      </li>
+      <li>
+        <h3>Integration with APIs</h3>
+        <p>
+          I have a collection of APIs which I intend to use to populate data in
+          certain modules - my first goal is to make a team builder using
+          <a href="https://pokeapi.co/" target="_blank">PokeApi </a>
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>My background</h2>
+    <p>
+      During the pandemic I needed something to occupy my time, so I decided to
+      take a programming course. This was suggested to me by a colleague who had
+      seen my usage of Excel to make intricate conditional calculators to help
+      me automate my work and guard against errors, first for myself, and then
+      for my employer. I discovered I found programming was not only enjoyable,
+      but it also felt intuitive
+    </p>
+    <p>
+      The following semester I crunched a math course to be eligible for
+      Vocational university - in Sweden called
+      <a href="https://www.yrkeshogskolan.se/in-english" target="_blank"
+        >Yrkeshögskola</a
+      >. I was accepted and spent 2 years studying to become a web developer,
+      which uncluded an internship working as a fullstack developer for
+      <a href="https://www.hogia.se/int/" target="_blank">Hogia </a>
+    </p>
+    <p>
+      While I am actively seeking a role as a frontend, backend, or full-stack
+      developer whilst working as a volonteer, I am also preparing to apply for
+      university in fall 2026 to work my way towards a bachelor's degree in
+      computer sience and/or software engineering as a backup plan should I not
+      find employment before then
+    </p>
+  </section>
+
+  <footer>
+    <h2>Contact</h2>
+    <ul>
+      <li>
+        <a href="https://github.com/theolsson" target="_blank">Github </a>
+      </li>
+      <li>
+        <a
+          href="https://www.Linkedin.com/in/theo-olsson-39010921b/?locale=en_US"
+          target="_blank"
+          >Linkedin
+        </a>
+      </li>
+    </ul>
+    <p id="footer-copyright">© 2025 Theo Olsson. All rights reserved</p>
+  </footer>
+</main>

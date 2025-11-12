@@ -201,8 +201,8 @@ nav {
   padding: var(--navbar-padding-long) var(--navbar-padding-short);
 
   background-color: var(--primary-background-color);
-  border: 1px solid var(--secondary-background-color);
-  box-shadow: 0px 1px 5px 1px var(--secondary-background-color);
+  border: 1px solid var(--contrast-color);
+  box-shadow: 0px 1px 5px 1px var(--contrast-color);
   color: var(--primary-color);
 
   transition: transform 0.5s ease-out;
@@ -221,7 +221,7 @@ nav {
     padding: var(--navbar-padding-short) 50px var(--navbar-padding-short)
       var(--navbar-padding-long);
 
-    box-shadow: 1px 0px 5px 1px var(--secondary-background-color);
+    box-shadow: 1px 0px 5px 1px var(--contrast-color);
 
     transform: translateX(0);
   }
