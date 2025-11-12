@@ -11,7 +11,6 @@ const carouselSecondPositionClass = "nav__carousel--second";
 const carouselThirdPositionClass = "nav__carousel--third";
 const carouselHiddenPositionClass = "nav__carousel--hidden";
 
-const contentContainerElem = document.getElementById(contentContainerId);
 let homeBtnElem;
 let navExpansionElem;
 let btnNavPrevElem;
@@ -52,9 +51,10 @@ function handleBreakpointChange() {
 
 /**
  * Adds event listener to collapse
- * {@link navExpansionElem} from {@link contentContainerElem}
+ * {@link navExpansionElem} from element with {@link contentContainerId}
  */
 function collapseFromContainerClick() {
+  const contentContainerElem = document.getElementById(contentContainerId);
   contentContainerElem[
     navIsCollapsed ? "removeEventListener" : "addEventListener"
   ]("click", collapseFromContainerClickLogic);
@@ -80,6 +80,7 @@ const collapseFromContainerClickLogic = () => {
   navExpansionElem.classList.add(navCollapsedClass);
   navIsCollapsed = true;
 
+  const contentContainerElem = document.getElementById(contentContainerId);
   contentContainerElem.removeEventListener(
     "click",
     collapseFromContainerClickLogic

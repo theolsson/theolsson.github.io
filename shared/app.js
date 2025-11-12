@@ -11,6 +11,7 @@ init();
 
 async function init() {
   await loadComponent();
+  await loadComponent("home");
 }
 
 /**

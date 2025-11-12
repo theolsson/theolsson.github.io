@@ -1,0 +1,92 @@
+/*----------------------------------------------------------------------*/
+/*                             Positioning                              */
+/*----------------------------------------------------------------------*/
+main {
+  padding: 20px;
+}
+
+@media (min-width: 769px) {
+  main {
+    padding: 40px;
+  }
+}
+
+main header {
+  margin-bottom: 2rem;
+}
+
+main section {
+  margin-bottom: 5rem;
+}
+
+@media (min-width: 769px) {
+  main section {
+    margin-bottom: 3rem;
+  }
+}
+
+/*----------------------------------------------------------------------*/
+/*                    Headings a link style override                    */
+/*----------------------------------------------------------------------*/
+main h1,
+main h2,
+main h3,
+main a {
+  font-weight: bold;
+}
+
+main h1 {
+  display: flex;
+  justify-content: center;
+
+  font-size: 1.5rem;
+}
+
+main h2 {
+  font-size: 1.3rem;
+}
+
+main h3 {
+  font-size: 1rem;
+}
+
+main a {
+  color: inherit;
+}
+
+/*----------------------------------------------------------------------*/
+/*                             Link hover                               */
+/*----------------------------------------------------------------------*/
+main a:hover {
+  color: var(--contrast-color);
+}
+
+main a:hover img {
+  filter: brightness(0) saturate(100%) invert(84%) sepia(56%) saturate(2517%)
+    hue-rotate(1deg) brightness(103%) contrast(105%);
+}
+
+main img {
+  height: 0.7rem;
+}
+
+/*----------------------------------------------------------------------*/
+/*                               Footer                                 */
+/*----------------------------------------------------------------------*/
+main footer {
+  display: flex;
+  flex-direction: column;
+
+  text-align: center;
+}
+
+main footer ul {
+  margin: 0;
+  padding: 0;
+
+  list-style-type: none;
+}
+
+main footer ul li {
+  margin-bottom: 0.5rem;
+}
