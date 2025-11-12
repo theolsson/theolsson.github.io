@@ -13,7 +13,7 @@
     </p>
     <p>
       It's an SPA hosted on GitHub Pages which dynamically loads components with
-      navigation handled my my custom built navbar. Live version can be found
+      navigation handled by my custom-built navbar. Live version can be found
       <a href="https://theolsson.github.io/" target="_blank">here</a>
     </p>
   </section>
@@ -41,8 +41,8 @@
         </p>
         <p>
           It is responsible for loading the navbar and home modules on startup
-          by fetching the html file an inserting it into index.html, as well as
-          creating and appending bth a link tag for the CSS file, and a script
+          by fetching the html file and inserting it into index.html, as well as
+          creating and appending both a link tag for the CSS file, and a script
           tag for the JavaScript file.
           <a
             href="https://github.com/theolsson/theolsson.github.io/blob/main/shared/app.js"
@@ -57,9 +57,9 @@
           The navbar has two positions based on screen width. Regardless of
           position it has a carousel to navigate between modules via their
           custom icons -
-          <span style="font-style: italic"> wip placeholders for now</span>
+          <span style="font-style: italic"> WIP placeholders for now</span>
           - and an expandable area which displays module names -
-          <span style="font-style: italic"> wip placeholders for now</span>
+          <span style="font-style: italic"> WIP placeholders for now</span>
         </p>
         <p>
           All assets, including the navbar design and interactions, are being
@@ -109,7 +109,7 @@
         <p>
           I have a collection of APIs which I intend to use to populate data in
           certain modules - my first goal is to make a team builder using
-          <a href="https://pokeapi.co/" target="_blank">PokeApi </a>
+          <a href="https://pokeapi.co/" target="_blank">PokeAPI </a>
         </p>
       </li>
     </ul>
@@ -131,14 +131,14 @@
       <a href="https://www.yrkeshogskolan.se/in-english" target="_blank"
         >Yrkeshögskola</a
       >. I was accepted and spent 2 years studying to become a web developer,
-      which uncluded an internship working as a fullstack developer for
+      which included an internship working as a full-stack developer for
       <a href="https://www.hogia.se/int/" target="_blank">Hogia </a>
     </p>
     <p>
       While I am actively seeking a role as a frontend, backend, or full-stack
-      developer whilst working as a volonteer, I am also preparing to apply for
+      developer whilst working as a volunteer, I am also preparing to apply for
       university in fall 2026 to work my way towards a bachelor's degree in
-      computer sience and/or software engineering as a backup plan should I not
+      computer science and/or software engineering as a backup plan should I not
       find employment before then
     </p>
   </section>
@@ -147,13 +147,13 @@
     <h2>Contact</h2>
     <ul>
       <li>
-        <a href="https://github.com/theolsson" target="_blank">Github </a>
+        <a href="https://github.com/theolsson" target="_blank">GitHub </a>
       </li>
       <li>
         <a
           href="https://www.Linkedin.com/in/theo-olsson-39010921b/?locale=en_US"
           target="_blank"
-          >Linkedin
+          >LinkedIn
         </a>
       </li>
     </ul>
