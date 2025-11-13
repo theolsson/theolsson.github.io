@@ -45,7 +45,7 @@
           creating and appending both a link tag for the CSS file, and a script
           tag for the JavaScript file.
           <a
-            href="https://github.com/theolsson/theolsson.github.io/blob/main/shared/app.js"
+            href="https://github.com/theolsson/theolsson.github.io/blob/main/app.js"
             target="_blank"
             >Code in app.js
           </a>
