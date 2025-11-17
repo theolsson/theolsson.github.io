@@ -79,7 +79,7 @@ nav {
   align-items: center;
   display: grid;
   grid-template-columns: 0 repeat(3, 1fr);
-  grid-template-rows: 60px;/* TODO: change to accomodate expansion height with full small screen functionality */
+  grid-template-rows: 60px; /* TODO: change to accomodate expansion height with full small screen functionality */
   justify-items: center;
   overflow: hidden;
 }
@@ -159,6 +159,10 @@ nav {
   .nav__icon:hover img {
     transform: scale(1);
   }
+
+  .nav__icon--current img {
+    transform: scale(1) !important;
+  }
 }
 
 .nav__arrow--reverse {
@@ -191,8 +195,13 @@ nav {
   }
 }
 
-.nav__arrow--hidden{
+.nav__arrow--hidden {
   visibility: hidden;
+}
+
+.nav__title--current{
+  color: var(--contrast-color)!important;
+  font-weight: bold;
 }
 
 /*----------------------------------------------------------------------*/

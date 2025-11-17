@@ -1,5 +1,5 @@
 let clickCounter;
-const storageKey = "theosSandbox:Clicker";
+const storageKey = "theosWorkshop:Clicker";
 const scoreElemId = "clicker-counter";
 
 export function init() {

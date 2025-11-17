@@ -1,6 +1,6 @@
 <main>
   <header>
-    <h1>Project: Theo's Sandbox</h1>
+    <h1>Project: Theo's Workshop</h1>
   </header>
 
   <section>

@@ -1,7 +1,10 @@
-import { getFilePathFromRoot } from "../../shared/services.js";
+import {
+  getFilePathFromRoot,
+  firstLetterToUpper,
+} from "../../shared/services.js";
 
 const navParentId = "navbar-container";
-const homeBtnId = "nav-btn-home";
+const menuBtnId = "nav-btn-menu";
 const navExpansionId = "nav-expansion";
 const contentContainerId = "main-container";
 const btnNavPrevId = "nav-btn-prev";
@@ -13,7 +16,7 @@ const carouselSecondPositionClass = "nav__carousel--second";
 const carouselThirdPositionClass = "nav__carousel--third";
 const carouselHiddenPositionClass = "nav__carousel--hidden";
 
-let homeBtnElem;
+let menuBtnElem;
 let navExpansionElem;
 let btnNavPrevElem;
 let btnNavNextElem;
@@ -28,7 +31,7 @@ let carouselModuleCount;
  * Initiate component on load
  */
 export function init() {
-  homeBtnElem = document.getElementById(homeBtnId);
+  menuBtnElem = document.getElementById(menuBtnId);
   navExpansionElem = document.getElementById(navExpansionId);
 
   initNavbarCollapseControl();
@@ -64,12 +67,15 @@ function collapseFromContainerClick() {
 
 /**
  * Initiate event listener controling
- * {@link navExpansionElem} state with {@link homeBtnElem}
+ * {@link navExpansionElem} state with {@link menuBtnElem}
  */
 function initNavbarCollapseControl() {
-  homeBtnElem.addEventListener("click", () => {
+  menuBtnElem.addEventListener("click", () => {
     navExpansionElem.classList.toggle(navCollapsedClass);
     navIsCollapsed = !navIsCollapsed;
+    navIsCollapsed
+      ? menuBtnElem.classList.remove("nav__icon--current")
+      : menuBtnElem.classList.add("nav__icon--current");
 
     collapseFromContainerClick();
   });
@@ -87,6 +93,7 @@ const collapseFromContainerClickLogic = () => {
     "click",
     collapseFromContainerClickLogic
   );
+  menuBtnElem.classList.remove("nav__icon--current");
 };
 
 /*----------------------------------------------------------------------*/
@@ -95,7 +102,7 @@ const collapseFromContainerClickLogic = () => {
 
 export function populateCarousel(moduleObjArray) {
   carouselModuleCount = moduleObjArray.length;
-  
+
   moduleObjArray.forEach((moduleObj) => {
     appendCarouselElem(moduleObj, "nav-carousel-icon");
     appendCarouselElem(moduleObj, "nav-carousel-title");
@@ -116,9 +123,10 @@ function appendCarouselElem(moduleObj, parentId) {
 
     btnElem.appendChild(imgElem);
     btnElem.classList.add("nav__icon");
+    btnElem.id = moduleObj.name + "-icon";
   } else {
-    btnElem.textContent =
-      moduleObj.name.charAt(0).toUpperCase() + moduleObj.name.slice(1);
+    btnElem.textContent = firstLetterToUpper(moduleObj.name);
+    btnElem.id = moduleObj.name + "-title";
   }
   liElem.appendChild(btnElem);
   parent.appendChild(liElem);
@@ -276,4 +284,50 @@ function scrollCarousel(carouselElems, triggerElem) {
       if (counter === carouselModuleSlots + 1) break;
     }
   });
+}
+
+export function updateNavState(moduleObjArray) {
+  const sessionModule = sessionStorage.getItem("currentModule");
+  document.getElementById("nav-current-module").textContent =
+    firstLetterToUpper(sessionModule);
+
+  moduleObjArray.forEach((module) => {
+    const iconBtnElem = document.getElementById(module.name + "-icon");
+    const titleBtnElem = document.getElementById(module.name + "-title");
+
+    if (iconBtnElem) {
+      iconBtnElem.disabled = false;
+      iconBtnElem.classList.remove("nav__icon--current");
+    }
+    if (titleBtnElem) {
+      titleBtnElem.disabled = false;
+      titleBtnElem.classList.remove("nav__title--current");
+    }
+  });
+
+  const currentModuleObj = moduleObjArray.find((m) => m.name === sessionModule);
+  if (!currentModuleObj) return;
+
+  const newModuleName = currentModuleObj.name;
+  const btnToDisable = document.getElementById(newModuleName + "-icon");
+  const titleToDisable = document.getElementById(newModuleName + "-title");
+
+  btnToDisable.disabled = true;
+  btnToDisable.classList.add("nav__icon--current");
+
+  titleToDisable.disabled = true;
+  titleToDisable.classList.add("nav__title--current");
+
+  if (navIsCollapsed) return;
+
+  navExpansionElem.classList.add(navCollapsedClass);
+  navIsCollapsed = true;
+  menuBtnElem.classList.remove("nav__icon--current");
+  const contentContainerElem = document.getElementById(contentContainerId);
+  if (contentContainerElem) {
+    contentContainerElem.removeEventListener(
+      "click",
+      collapseFromContainerClickLogic
+    );
+  }
 }

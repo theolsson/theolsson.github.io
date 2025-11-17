@@ -1,83 +1,86 @@
-import {getFilePathFromRoot} from "./shared/services.js";
-
-const htmlFile = ".html";
-const cssFile = ".css";
-const jsFile = ".js";
-
-const navbarId = "navbar-container";
-const mainId = "main-container";
+import { getFilePathFromRoot } from "./shared/services.js";
+import {
+  HTML_FILE_EXTENSION,
+  CSS_FILE_EXTENSION,
+  JS_FILE_EXTENSION,
+  NAVBAR_CONTAINER_ID,
+  MAIN_CONTAINER_ID,
+} from "./shared/constants.js";
 
 /**
  * Fetches content of html and returns as a html element
- * @param {string} moduleToLoad Name of folder in either components or modules and the files
+ * @param {string} moduleName Name of folder in either components or modules and the files
  * @returns {Promise<HTMLElement>} Replacement element for container
  */
-function getHTML(moduleToLoad) {
-  const file = getFilePathFromRoot(moduleToLoad, htmlFile);
+async function getHTML(moduleName) {
+  const file = getFilePathFromRoot(moduleName, HTML_FILE_EXTENSION);
 
-  return fetch(file)
-    .then((response) => {
-      if (!response.ok) throw new Error(`${response.status} on fetch`);
+  const response = await fetch(file);
+  if (!response.ok) throw new Error(`${response.status} on fetch`);
 
-      return response.text();
-    })
-    .then((text) => {
-      const html = text.trim();
-      if (!html?.startsWith("<")) throw new Error("No HTML returned on fetch");
+  const html = (await response.text()).trim();
+  if (!html?.startsWith("<")) throw new Error("No HTML returned on fetch");
 
-      console.log(`Successfully loaded ${file}`);
-      const fragment = document.createRange().createContextualFragment(html);
-      const element = fragment.firstElementChild;
-      return element;
-    });
+  const fragment = document.createRange().createContextualFragment(html);
+  const element = fragment.firstElementChild;
+  return element;
 }
 
 /**
  * Loads the CSS or JavaScript by appending link or script tag based on params
- * @param {string} moduleToLoad Name of folder in either components or modules and the files
- * @param {string} fileType {@link cssFile} or {@link jsFile}
+ * @param {string} moduleName Name of folder in either components or modules and the files
+ * @param {string} fileExtension {@link CSS_FILE_EXTENSION} or {@link JS_FILE_EXTENSION}
  * @returns {Promise<void>} Resolves when asset is appended and loaded
  */
-function loadAsset(moduleToLoad, fileType) {
-  if (fileType !== cssFile && fileType !== jsFile)
-    return reject(new Error(`Unsupported file type ${fileType}`));
+function loadAsset(moduleName, fileExtension) {
+  if (
+    fileExtension !== CSS_FILE_EXTENSION &&
+    fileExtension !== JS_FILE_EXTENSION
+  )
+    return Promise.reject(new Error(`Unsupported file type ${fileExtension}`));
 
-  const path = getFilePathFromRoot(moduleToLoad, fileType);
-  const loadingNavbar = moduleToLoad === "navbar";
+  const path = getFilePathFromRoot(moduleName, fileExtension);
+  const loadingNavbar = moduleName === "navbar";
 
-  const elementId = !loadingNavbar
-    ? `module-${fileType === cssFile ? "css" : "js"}`
+  const assetElementId = !loadingNavbar
+    ? `module-${fileExtension === CSS_FILE_EXTENSION ? "css" : "js"}`
     : null;
 
   return new Promise((resolve, reject) => {
-    if (elementId) removeExistingAsset(elementId);
+    if (assetElementId) removeExistingAsset(assetElementId);
 
-    let element;
+    const elementToAppend = createAssetElement(path, fileExtension);
 
-    if (fileType === cssFile) {
-      element = document.createElement("link");
-      element.rel = "stylesheet";
-      element.href = path;
-    } else {
-      element = document.createElement("script");
-      element.type = "module";
-      element.src = path;
-    }
+    if (assetElementId) elementToAppend.id = assetElementId;
 
-    if (elementId) element.id = elementId;
-
-    element.onerror = () => {
+    elementToAppend.onerror = () => {
       reject(new Error(`Failed to load ${path}`));
     };
 
-    element.onload = () => {
-      console.log(`Successfully loaded ${path}`);
+    elementToAppend.onload = () => {
+      // console.log(`Successfully loaded ${path}`); //For dev only
       resolve();
     };
 
-    if (fileType === cssFile) document.head.appendChild(element);
-    else document.body.appendChild(element);
+    if (fileExtension === CSS_FILE_EXTENSION)
+      document.head.appendChild(elementToAppend);
+    else document.body.appendChild(elementToAppend);
   });
+}
+
+function createAssetElement(path, fileExtension) {
+  if (fileExtension === CSS_FILE_EXTENSION) {
+    const linkElem = document.createElement("link");
+    linkElem.rel = "stylesheet";
+    linkElem.href = path;
+    return linkElem;
+  } else {
+    const scriptElem = document.createElement("script");
+    scriptElem.type = "module";
+    scriptElem.src = path;
+    scriptElem.defer = true;
+    return scriptElem;
+  }
 }
 
 /**
@@ -92,20 +95,25 @@ function removeExistingAsset(elementId) {
 /**
  * Replaces container element with html in component's folder and calls the loading of
  * css and js, making sure js loads after html
- * @param {string} moduleToLoad Name of folder in either components or modules and the files - default "navbar"
+ * @param {string} moduleName Name of folder in either components or modules and the files - default "navbar"
  */
-export async function loadComponent(moduleToLoad) {
-  const loadingNavbar = moduleToLoad === "navbar";
+export async function loadModule(moduleName) {
+  const loadingNavbar = moduleName === "navbar";
 
-  const container = document.getElementById(loadingNavbar ? navbarId : mainId);
-  if (container) container.innerHTML = "";
+  const container = document.getElementById(
+    loadingNavbar ? NAVBAR_CONTAINER_ID : MAIN_CONTAINER_ID
+  );
+  if (!container) throw new Error(`Container for ${moduleName} not found`);
+  
+  const componentHTML = await getHTML(moduleName);
+
+  container.innerHTML = "";
 
   await Promise.all([
-    loadAsset(moduleToLoad, cssFile),
-    loadAsset(moduleToLoad, jsFile),
+    loadAsset(moduleName, CSS_FILE_EXTENSION),
+    loadAsset(moduleName, JS_FILE_EXTENSION),
   ]);
 
-  const componentHTML = await getHTML(moduleToLoad);
-  componentHTML.id = loadingNavbar ? navbarId : mainId;
+  componentHTML.id = loadingNavbar ? NAVBAR_CONTAINER_ID : MAIN_CONTAINER_ID;
   container.replaceWith(componentHTML);
 }
