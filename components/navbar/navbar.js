@@ -1,3 +1,5 @@
+import { getFilePathFromRoot } from "../../shared/services.js";
+
 const navParentId = "navbar-container";
 const homeBtnId = "nav-btn-home";
 const navExpansionId = "nav-expansion";
@@ -20,31 +22,31 @@ const maxWidthQuery = window.matchMedia("(max-width: 768px)");
 let navIsCollapsed = true;
 
 const carouselModuleSlots = 3;
+let carouselModuleCount;
 
 /**
  * Initiate component on load
  */
-function initNavbar() {
+export function init() {
   homeBtnElem = document.getElementById(homeBtnId);
   navExpansionElem = document.getElementById(navExpansionId);
 
   initNavbarCollapseControl();
-  initCarouselControl();
+  initCarousel();
 
   handleBreakpointChange();
 }
 
 function handleBreakpointChange() {
-  maxWidthQuery.addEventListener("change", changeE => {
-
+  maxWidthQuery.addEventListener("change", () => {
     const navParentElem = document.getElementById(navParentId);
     if (!navParentElem) return;
 
-    navParentElem.classList.add('transitions--disabled');
+    navParentElem.classList.add("transitions--disabled");
     void navParentElem.offsetHeight;
 
     setTimeout(() => {
-      navParentElem.classList.remove('transitions--disabled');
+      navParentElem.classList.remove("transitions--disabled");
     }, 100);
   });
 }
@@ -87,12 +89,55 @@ const collapseFromContainerClickLogic = () => {
   );
 };
 
+/*----------------------------------------------------------------------*/
+/*                              Carousel                                */
+/*----------------------------------------------------------------------*/
+
+export function populateCarousel(moduleObjArray) {
+  carouselModuleCount = moduleObjArray.length;
+  
+  moduleObjArray.forEach((moduleObj) => {
+    appendCarouselElem(moduleObj, "nav-carousel-icon");
+    appendCarouselElem(moduleObj, "nav-carousel-title");
+  });
+}
+
+function appendCarouselElem(moduleObj, parentId) {
+  const parent = document.getElementById(parentId);
+  const liElem = document.createElement("li");
+  const btnElem = document.createElement("button");
+  btnElem.addEventListener("click", () => moduleObj.loader());
+
+  const hasIcon = parentId === "nav-carousel-icon";
+
+  if (hasIcon) {
+    const imgElem = document.createElement("img");
+    imgElem.src = getFilePathFromRoot(moduleObj.name, ".png");
+
+    btnElem.appendChild(imgElem);
+    btnElem.classList.add("nav__icon");
+  } else {
+    btnElem.textContent =
+      moduleObj.name.charAt(0).toUpperCase() + moduleObj.name.slice(1);
+  }
+  liElem.appendChild(btnElem);
+  parent.appendChild(liElem);
+}
+
 /**
  * Assigns grid-row to list elements and calls to add listeners
  * to manipulate content in module carousels
  */
-function initCarouselControl() {
-  carouselScrollListeners();
+function initCarousel() {
+  btnNavPrevElem = document.getElementById(btnNavPrevId);
+  btnNavNextElem = document.getElementById(btnNavNextId);
+
+  if (carouselModuleCount < carouselModuleSlots) {
+    btnNavPrevElem.classList.add("nav__arrow--hidden");
+    btnNavNextElem.classList.add("nav__arrow--hidden");
+  } else {
+    carouselScrollListeners();
+  }
 
   const carouselElems = document.querySelectorAll(".nav__carousel");
 
@@ -154,8 +199,6 @@ function canScroll(carouselElems, triggerElem) {
  * to control all nav carousels in sync
  */
 function carouselScrollListeners() {
-  btnNavPrevElem = document.getElementById(btnNavPrevId);
-  btnNavNextElem = document.getElementById(btnNavNextId);
   const carouselElems = document.querySelectorAll(".nav__carousel");
 
   btnNavPrevElem.addEventListener("click", () => {

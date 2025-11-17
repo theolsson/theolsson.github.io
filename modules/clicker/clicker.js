@@ -2,10 +2,17 @@ let clickCounter;
 const storageKey = "theosSandbox:Clicker";
 const scoreElemId = "clicker-counter";
 
-function initClicker() {
+export function init() {
   clickCounter = parseInt(localStorage.getItem(storageKey)) || 0;
   const counterElem = document.getElementById(scoreElemId);
   counterElem.textContent = clickCounter;
+  document
+    .getElementById("clicker-increase")
+    .addEventListener("click", () => increaseCount());
+
+  document
+    .getElementById("clicker-reset")
+    .addEventListener("click", () => clearCounter());
 }
 
 function increaseCount() {

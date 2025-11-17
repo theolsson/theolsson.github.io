@@ -1,5 +1,5 @@
-const componentsPath = "./components";
-const modulesPath = "./modules";
+import {getFilePathFromRoot} from "./shared/services.js";
+
 const htmlFile = ".html";
 const cssFile = ".css";
 const jsFile = ".js";
@@ -7,20 +7,13 @@ const jsFile = ".js";
 const navbarId = "navbar-container";
 const mainId = "main-container";
 
-init();
-
-async function init() {
-  await loadComponent();
-  await loadComponent("home");
-}
-
 /**
  * Fetches content of html and returns as a html element
  * @param {string} moduleToLoad Name of folder in either components or modules and the files
  * @returns {Promise<HTMLElement>} Replacement element for container
  */
 function getHTML(moduleToLoad) {
-  const file = getFilePath(moduleToLoad, htmlFile);
+  const file = getFilePathFromRoot(moduleToLoad, htmlFile);
 
   return fetch(file)
     .then((response) => {
@@ -49,7 +42,7 @@ function loadAsset(moduleToLoad, fileType) {
   if (fileType !== cssFile && fileType !== jsFile)
     return reject(new Error(`Unsupported file type ${fileType}`));
 
-  const path = getFilePath(moduleToLoad, fileType);
+  const path = getFilePathFromRoot(moduleToLoad, fileType);
   const loadingNavbar = moduleToLoad === "navbar";
 
   const elementId = !loadingNavbar
@@ -67,7 +60,7 @@ function loadAsset(moduleToLoad, fileType) {
       element.href = path;
     } else {
       element = document.createElement("script");
-      // element.type = "module";
+      element.type = "module";
       element.src = path;
     }
 
@@ -89,7 +82,7 @@ function loadAsset(moduleToLoad, fileType) {
 
 /**
  * Removes element by id
- * @param {string} elementId 
+ * @param {string} elementId
  */
 function removeExistingAsset(elementId) {
   const existing = document.getElementById(elementId);
@@ -101,40 +94,18 @@ function removeExistingAsset(elementId) {
  * css and js, making sure js loads after html
  * @param {string} moduleToLoad Name of folder in either components or modules and the files - default "navbar"
  */
-async function loadComponent(moduleToLoad = "navbar") {
+export async function loadComponent(moduleToLoad) {
   const loadingNavbar = moduleToLoad === "navbar";
-  try {
-    await Promise.all([
-      loadAsset(moduleToLoad, cssFile),
-      loadAsset(moduleToLoad, jsFile),
-    ]);
 
-    const initFnName = `init${
-      moduleToLoad.charAt(0).toUpperCase() + moduleToLoad.slice(1)
-    }`;
-    if (typeof window[initFnName] !== "function")
-      throw new Error(`${initFnName} is not ${moduleToLoad}'s init function`);
+  const container = document.getElementById(loadingNavbar ? navbarId : mainId);
+  if (container) container.innerHTML = "";
 
-    const componentHTML = await getHTML(moduleToLoad);
-    const container = document.getElementById(
-      loadingNavbar ? navbarId : mainId
-    );
-    componentHTML.id = loadingNavbar ? navbarId : mainId;
-    container.replaceWith(componentHTML);
+  await Promise.all([
+    loadAsset(moduleToLoad, cssFile),
+    loadAsset(moduleToLoad, jsFile),
+  ]);
 
-    window[initFnName]();
-  } catch (error) {
-    console.error(`Failed to load navbar: ${error}`);
-  }
-}
-
-/**
- * Generates the file path to a component or module
- * @param {string} moduleToLoad Name of folder in either components or modules and the files
- * @param {string} fileType Use either {@link htmlFile}, {@link cssFile}, or {@link jsFile}
- * @returns
- */
-function getFilePath(moduleToLoad, fileType) {
-  let pathStart = moduleToLoad === "navbar" ? componentsPath : modulesPath;
-  return `${pathStart}/${moduleToLoad}/${moduleToLoad}${fileType}`;
+  const componentHTML = await getHTML(moduleToLoad);
+  componentHTML.id = loadingNavbar ? navbarId : mainId;
+  container.replaceWith(componentHTML);
 }
