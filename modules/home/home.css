@@ -2,12 +2,14 @@
 /*                             Positioning                              */
 /*----------------------------------------------------------------------*/
 main {
-  padding: 20px;
+  padding-block: 20px;
+  padding-inline: max(10%, 20px);
 }
 
 @media (min-width: 769px) {
   main {
-    padding: 40px;
+    padding-block: 40px;
+    padding-inline: max(5%, 40px);
   }
 }
 
@@ -25,13 +27,16 @@ main section {
   }
 }
 
+.home__features li {
+  margin-bottom: 3rem;
+}
+
 /*----------------------------------------------------------------------*/
 /*                    Headings a link style override                    */
 /*----------------------------------------------------------------------*/
 main h1,
 main h2,
-main h3,
-main a {
+main h3 {
   font-weight: bold;
 }
 
@@ -48,26 +53,6 @@ main h2 {
 
 main h3 {
   font-size: 1rem;
-}
-
-main a {
-  color: inherit;
-}
-
-/*----------------------------------------------------------------------*/
-/*                             Link hover                               */
-/*----------------------------------------------------------------------*/
-main a:hover {
-  color: var(--contrast-color);
-}
-
-main a:hover img {
-  filter: brightness(0) saturate(100%) invert(84%) sepia(56%) saturate(2517%)
-    hue-rotate(1deg) brightness(103%) contrast(105%);
-}
-
-main img {
-  height: 0.7rem;
 }
 
 /*----------------------------------------------------------------------*/

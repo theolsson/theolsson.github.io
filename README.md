@@ -90,6 +90,24 @@
           </a>
         </p>
       </li>
+      <li>
+        <h3>Clicker</h3>
+        <p>
+          A basic version of an incremental game, relying on local storage to
+          keep track of your score. There might be some more functionality
+          accessable to people who play around a bit <s>(or read the source code)</s>
+        </p>
+        <p>
+          I have plans to revisit this in the future to add functionality - but
+          for now, it is a simple module made to allow me to populate the navbar
+          and show its functionality with more than placeholders
+        </p>
+        <a
+          href="https://github.com/theolsson/theolsson.github.io/tree/main/modules/clicker"
+          target="_blank"
+          >Code in modules/clicker
+        </a>
+      </li>
     </ul>
   </section>
 
@@ -100,7 +118,7 @@
         <h3>Minigames</h3>
         <p>
           I intend to make a series of minigames as their own modules. For
-          example I intend to develop a button clicker, tic tac toe, snake, and
+          example I intend to develop a <del>button clicker</del>(done), tic tac toe, snake, and
           pong modules
         </p>
       </li>
@@ -127,19 +145,19 @@
     </p>
     <p>
       The following semester I crunched a math course to be eligible for
-      Vocational university - in Sweden called
+      vocational university - in Sweden called
       <a href="https://www.yrkeshogskolan.se/in-english" target="_blank"
-        >Yrkeshögskola</a
+        >yrkeshögskola</a
       >. I was accepted and spent 2 years studying to become a web developer,
       which included an internship working as a full-stack developer for
       <a href="https://www.hogia.se/int/" target="_blank">Hogia </a>
     </p>
     <p>
-      While I am actively seeking a role as a frontend, backend, or full-stack
-      developer whilst working as a volunteer, I am also preparing to apply for
-      university in fall 2026 to work my way towards a bachelor's degree in
-      computer science and/or software engineering as a backup plan should I not
-      find employment before then
+      I am currently seeking a role as a frontend-, backend-, or
+      full-stack-developer whilst working as a volunteer. I am also preparing to
+      apply to start university in fall 2026 to work my way towards a bachelor's
+      degree in computer science or software engineering as a backup plan
+      should I not find employment before then
     </p>
   </section>
 
