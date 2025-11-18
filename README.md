@@ -43,35 +43,33 @@
           It is responsible for loading the navbar and home modules on startup
           by fetching the html file and inserting it into index.html, as well as
           creating and appending both a link tag for the CSS file, and a script
-          tag for the JavaScript file.
-          <a
-            href="https://github.com/theolsson/theolsson.github.io/blob/main/app.js"
-            target="_blank"
-            >Code in app.js
-          </a>
+          tag for the JavaScript file
         </p>
+        <a
+          href="https://github.com/theolsson/theolsson.github.io/blob/main/app.js"
+          target="_blank"
+          >Code in app.js
+        </a>
       </li>
       <li>
         <h3>Navbar</h3>
         <p>
           The navbar has two positions based on screen width. Regardless of
           position it has a carousel to navigate between modules via their
-          custom icons -
-          <span style="font-style: italic"> WIP placeholders for now</span>
-          - and an expandable area which displays module names -
-          <span style="font-style: italic"> WIP placeholders for now</span>
+          custom icons and an expandable area which displays module names and
+          populate itself dynamically with the modules
         </p>
         <p>
           All assets, including the navbar design and interactions, are being
           created from scratch by me, without the use of frameworks or
           templates, relying instead on my own CSS and JavaScript skills to
-          build this first component.
-          <a
-            href="https://github.com/theolsson/theolsson.github.io/tree/main/components/navbar"
-            target="_blank"
-            >Code in components/navbar
-          </a>
+          build this first component
         </p>
+        <a
+          href="https://github.com/theolsson/theolsson.github.io/tree/main/components/navbar"
+          target="_blank"
+          >Code in components/navbar
+        </a>
       </li>
       <li>
         <h3>Home page</h3>
@@ -82,13 +80,13 @@
         <p>
           This page has intentional minimal styling, as I intend to update it as
           the project moves along - and it in itself is only meant to offer
-          information.
-          <a
-            href="https://github.com/theolsson/theolsson.github.io/tree/main/modules/home"
-            target="_blank"
-            >Code in modules/home
-          </a>
+          information
         </p>
+        <a
+          href="https://github.com/theolsson/theolsson.github.io/tree/main/modules/home"
+          target="_blank"
+          >Code in modules/home
+        </a>
       </li>
       <li>
         <h3>Clicker</h3>
