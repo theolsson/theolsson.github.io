@@ -2,7 +2,7 @@
   <div class="nav__shortcuts">
     <ul>
       <li>
-        <button id="nav-btn-home" class="nav__icon">
+        <button id="nav-btn-menu" class="nav__icon">
           <img src="components/navbar/icons/icon-list.png" />
         </button>
       </li>
@@ -12,28 +12,7 @@
       <img src="components/navbar/icons/arrow.png" />
     </button>
 
-    <ul class="nav__carousel">
-      <li>
-        <button class="nav__icon">
-          <img src="shared/icons/wip1.png" />
-        </button>
-      </li>
-      <li>
-        <button class="nav__icon">
-          <img src="shared/icons/wip2.png" />
-        </button>
-      </li>
-      <li>
-        <button class="nav__icon">
-          <img src="shared/icons/wip3.png" />
-        </button>
-      </li>
-      <li>
-        <button class="nav__icon">
-          <img src="shared/icons/wip4.png" />
-        </button>
-      </li>
-    </ul>
+    <ul id="nav-carousel-icon" class="nav__carousel"></ul>
 
     <button id="nav-btn-next" class="nav__arrow nav__arrow--reverse">
       <img src="components/navbar/icons/arrow.png" />
@@ -46,36 +25,14 @@
   >
     <ul>
       <li>
-        <button>
-          <p>Home</p>
-        </button>
+        <p>Current Module:</p>
+        <p id="nav-current-module" class="nav__title--current"></p>
       </li>
     </ul>
 
     <p><!--Filler for future element--></p>
 
-    <ul class="nav__carousel">
-      <li>
-        <button>
-          <p>WIP 1</p>
-        </button>
-      </li>
-      <li>
-        <button>
-          <p>WIP 2</p>
-        </button>
-      </li>
-      <li>
-        <button>
-          <p>WIP 3</p>
-        </button>
-      </li>
-      <li>
-        <button>
-          <p>WIP 4</p>
-        </button>
-      </li>
-    </ul>
+    <ul id="nav-carousel-title" class="nav__carousel"></ul>
 
     <p><!--Filler for future element--></p>
   </div>

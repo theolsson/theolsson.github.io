@@ -1,236 +1,261 @@
-const navParentId = "navbar-container";
-const homeBtnId = "nav-btn-home";
+import {
+  CURRENT_MODULE_KEY,
+  PNG_FILE_EXTENSION,
+} from "../../shared/constants.js";
+import {
+  getFilePathFromRoot,
+  firstLetterToUpper,
+  getElemById,
+} from "../../shared/services.js";
+
+const navContainerId = "navbar-container";
+const menuBtnId = "nav-btn-menu";
 const navExpansionId = "nav-expansion";
 const contentContainerId = "main-container";
 const btnNavPrevId = "nav-btn-prev";
 const btnNavNextId = "nav-btn-next";
 
 const navCollapsedClass = "nav__expansion--hidden";
-const carouselFirstPositionClass = "nav__carousel--first";
-const carouselSecondPositionClass = "nav__carousel--second";
-const carouselThirdPositionClass = "nav__carousel--third";
-const carouselHiddenPositionClass = "nav__carousel--hidden";
+const carouselHiddenItemClass = "nav__carousel--hidden";
 
-let homeBtnElem;
+let menuBtnElem;
 let navExpansionElem;
 let btnNavPrevElem;
 let btnNavNextElem;
+let carouselElems;
 
-const maxWidthQuery = window.matchMedia("(max-width: 768px)");
-let navIsCollapsed = true;
+let maxWidthQuery;
+let isNavCollapsed = true;
 
-const carouselModuleSlots = 3;
+const carouselSlotCount = 3;
+let carouselModuleCount;
 
-/**
- * Initiate component on load
- */
-function initNavbar() {
-  homeBtnElem = document.getElementById(homeBtnId);
-  navExpansionElem = document.getElementById(navExpansionId);
-
+export function init() {
+  cacheNavElems();
   initNavbarCollapseControl();
-  initCarouselControl();
-
-  handleBreakpointChange();
+  initCarousel();
+  breakpointChangeHandler();
 }
 
-function handleBreakpointChange() {
-  maxWidthQuery.addEventListener("change", changeE => {
+function cacheNavElems() {
+  menuBtnElem = getElemById(menuBtnId);
+  navExpansionElem = getElemById(navExpansionId);
+  maxWidthQuery = window.matchMedia("(max-width: 768px)");
+  carouselElems = document.querySelectorAll(".nav__carousel");
+}
 
-    const navParentElem = document.getElementById(navParentId);
-    if (!navParentElem) return;
+function breakpointChangeHandler() {
+  maxWidthQuery.addEventListener("change", () => {
+    const navContainer = getElemById(navContainerId);
+    navContainer.classList.add("transitions--disabled");
 
-    navParentElem.classList.add('transitions--disabled');
-    void navParentElem.offsetHeight;
-
-    setTimeout(() => {
-      navParentElem.classList.remove('transitions--disabled');
-    }, 100);
+    // Double call to guard against flicker for redundancy
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        navContainer.classList.remove("transitions--disabled");
+      });
+    });
   });
 }
 
-/**
- * Adds event listener to collapse
- * {@link navExpansionElem} from element with {@link contentContainerId}
- */
-function collapseFromContainerClick() {
-  const contentContainerElem = document.getElementById(contentContainerId);
-  contentContainerElem[
-    navIsCollapsed ? "removeEventListener" : "addEventListener"
-  ]("click", collapseFromContainerClickLogic);
-}
+export function updateNavState(moduleObjArray) {
+  const sessionModule = sessionStorage.getItem(CURRENT_MODULE_KEY) || "home";
+  getElemById("nav-current-module").textContent =
+    firstLetterToUpper(sessionModule);
 
-/**
- * Initiate event listener controling
- * {@link navExpansionElem} state with {@link homeBtnElem}
- */
-function initNavbarCollapseControl() {
-  homeBtnElem.addEventListener("click", () => {
-    navExpansionElem.classList.toggle(navCollapsedClass);
-    navIsCollapsed = !navIsCollapsed;
-
-    collapseFromContainerClick();
+  moduleObjArray.forEach((module) => {
+    setModuleBtnState(getElemById(module.name + "-icon"), false, "icon");
+    setModuleBtnState(getElemById(module.name + "-title"), false, "title");
   });
-}
 
-/**
- * Logic for {@link collapseFromContainerClick}
- */
-const collapseFromContainerClickLogic = () => {
-  navExpansionElem.classList.add(navCollapsedClass);
-  navIsCollapsed = true;
+  const currentModuleObj = moduleObjArray.find((m) => m.name === sessionModule);
+  if (!currentModuleObj) return;
 
-  const contentContainerElem = document.getElementById(contentContainerId);
-  contentContainerElem.removeEventListener(
-    "click",
-    collapseFromContainerClickLogic
+  setModuleBtnState(getElemById(currentModuleObj.name + "-icon"), true, "icon");
+  setModuleBtnState(
+    getElemById(currentModuleObj.name + "-title"),
+    true,
+    "title"
   );
-};
 
-/**
- * Assigns grid-row to list elements and calls to add listeners
- * to manipulate content in module carousels
- */
-function initCarouselControl() {
-  carouselScrollListeners();
+  collapseNavExpansion();
+}
 
-  const carouselElems = document.querySelectorAll(".nav__carousel");
+function setModuleBtnState(btnElem, isActive, type) {
+  if (!btnElem) return;
+  btnElem.disabled = isActive;
+  btnElem.classList.toggle(`nav__${type}--current`, isActive);
+}
+
+/*----------------------------------------------------------------------*/
+/*                              Expansion                               */
+/*----------------------------------------------------------------------*/
+function initNavbarCollapseControl() {
+  menuBtnElem.addEventListener("click", () => {
+    navExpansionElem.classList.toggle(navCollapsedClass);
+    isNavCollapsed = !isNavCollapsed;
+    menuBtnElem.classList.toggle("nav__icon--current", !isNavCollapsed);
+
+    setContentContainerClickListener();
+  });
+}
+
+function collapseNavExpansion() {
+  if (isNavCollapsed) return;
+
+  navExpansionElem.classList.add(navCollapsedClass);
+  isNavCollapsed = true;
+  menuBtnElem.classList.remove("nav__icon--current");
+
+  const contentContainerElem = getElemById(contentContainerId);
+  contentContainerElem.removeEventListener("click", collapseNavExpansion);
+}
+
+function setContentContainerClickListener() {
+  const contentContainerElem = getElemById(contentContainerId);
+  if (!contentContainerElem) return;
+
+  if (!isNavCollapsed) {
+    contentContainerElem.addEventListener("click", collapseNavExpansion);
+  } else {
+    contentContainerElem.removeEventListener("click", collapseNavExpansion);
+  }
+}
+
+/*----------------------------------------------------------------------*/
+/*                              Carousel                                */
+/*----------------------------------------------------------------------*/
+export function populateCarousel(moduleObjArray) {
+  if (!Array.isArray(moduleObjArray))
+    throw new Error("populateCarousel: invalid modules array");
+  carouselModuleCount = moduleObjArray.length;
+
+  // Destructure to access only the properties needed locally
+  moduleObjArray.forEach(({ name, loader }, i) => {
+    moduleObjectValidator({ name, loader }, i);
+
+    appendToCarousel({ name, loader }, "nav-carousel-icon");
+    appendToCarousel({ name, loader }, "nav-carousel-title");
+  });
+}
+
+function moduleObjectValidator(moduleObj, i) {
+  if (
+    !moduleObj ||
+    typeof moduleObj.name !== "string" ||
+    moduleObj.name.length === 0
+  )
+    throw new Error(
+      `populateCarousel: moduleObjArray[${i}].name is not a valid string`
+    );
+  if (typeof moduleObj.loader !== "function")
+    throw new Error(`populateCarousel: ${moduleObj.name} has invalid loader`);
+}
+
+function appendToCarousel(moduleObj, carouselId) {
+  const carouselElem = getElemById(carouselId);
+  const liElem = document.createElement("li");
+  const btnElem = document.createElement("button");
+  btnElem.addEventListener("click", () => moduleObj.loader());
+
+  const hasIcon = carouselId === "nav-carousel-icon";
+
+  if (hasIcon) {
+    const imgElem = document.createElement("img");
+    imgElem.src = getFilePathFromRoot(moduleObj.name, PNG_FILE_EXTENSION);
+
+    btnElem.appendChild(imgElem);
+    btnElem.classList.add("nav__icon");
+    btnElem.id = `${moduleObj.name}-icon`;
+  } else {
+    btnElem.textContent = firstLetterToUpper(moduleObj.name);
+    btnElem.id = `${moduleObj.name}-title`;
+  }
+  liElem.appendChild(btnElem);
+  carouselElem.appendChild(liElem);
+}
+
+function initCarousel() {
+  btnNavPrevElem = getElemById(btnNavPrevId);
+  btnNavNextElem = getElemById(btnNavNextId);
+
+  const navElem = document.querySelector("nav");
+
+  if (carouselModuleCount < carouselSlotCount) {
+    navElem.style.setProperty("--carousel-slot-count", carouselModuleCount);
+
+    btnNavPrevElem.classList.add("nav__arrow--hidden");
+    btnNavNextElem.classList.add("nav__arrow--hidden");
+  } else {
+    navElem.style.setProperty("--carousel-slot-count", carouselSlotCount);
+
+    setCarouselScrollListeners();
+  }
 
   carouselElems.forEach((ul) => {
     const liElems = ul.querySelectorAll("li");
 
     liElems.forEach((li, i) => {
-      switch (i) {
-        case 0:
-          li.classList.add(carouselFirstPositionClass);
-          break;
-        case 1:
-          li.classList.add(carouselSecondPositionClass);
-          break;
-        case 2:
-          li.classList.add(carouselThirdPositionClass);
-          break;
-        default:
-          li.classList.add(carouselHiddenPositionClass);
-          break;
-      }
+      if (i >= carouselSlotCount) li.classList.add(carouselHiddenItemClass);
     });
   });
 }
 
-/**
- * Check if overflow is available to move into top or bottom position
- * based on {@link triggerElem}
- * @param {Array<HTMLElement>} carouselElems - List of nav carousel(s)
- * @param {HTMLElement} triggerElem - The button trigger
- * @returns {boolean}
- */
-function canScroll(carouselElems, triggerElem) {
-  const hasContentToScroll =
-    carouselElems[0].querySelectorAll("li").length > carouselModuleSlots;
+function setCarouselScrollListeners() {
+  btnNavPrevElem.addEventListener("click", () => {
+    if (!canScroll(btnNavPrevElem)) return;
+
+    scrollCarousel(btnNavPrevElem);
+  });
+
+  btnNavNextElem.addEventListener("click", () => {
+    if (!canScroll(btnNavNextElem)) return;
+
+    scrollCarousel(btnNavNextElem);
+  });
+}
+
+function canScroll(triggerElem) {
+  const hasOverflow = carouselElems[0].children.length > carouselSlotCount;
+
+  if (!hasOverflow) return false;
 
   if (triggerElem === btnNavNextElem) {
-    return (
-      hasContentToScroll &&
-      carouselElems[0]
-        .querySelector("li:last-child")
-        .classList.contains(carouselHiddenPositionClass)
+    return carouselElems[0].lastElementChild.classList.contains(
+      carouselHiddenItemClass
     );
   }
   if (triggerElem === btnNavPrevElem) {
-    return (
-      hasContentToScroll &&
-      carouselElems[0]
-        .querySelector("li:first-child")
-        .classList.contains(carouselHiddenPositionClass)
+    return carouselElems[0].firstElementChild.classList.contains(
+      carouselHiddenItemClass
     );
   }
 
   return false;
 }
 
-/**
- * Adds event listeners to {@link btnNavPrevElem} and {@link btnNavNextElem}
- * to control all nav carousels in sync
- */
-function carouselScrollListeners() {
-  btnNavPrevElem = document.getElementById(btnNavPrevId);
-  btnNavNextElem = document.getElementById(btnNavNextId);
-  const carouselElems = document.querySelectorAll(".nav__carousel");
-
-  btnNavPrevElem.addEventListener("click", () => {
-    if (!canScroll(carouselElems, btnNavPrevElem)) {
-      return;
-    }
-
-    scrollCarousel(carouselElems, btnNavPrevElem);
-  });
-
-  btnNavNextElem.addEventListener("click", () => {
-    if (!canScroll(carouselElems, btnNavNextElem)) return;
-
-    scrollCarousel(carouselElems, btnNavNextElem);
-  });
-}
-
-/**
- * Repositions the li children of {@link carouselElems} in the carousel
- * based on {@link triggerElem} direction
- * @param {Array<HTMLElement>} carouselElems - List of nav carousel(s)
- * @param {HTMLElement} triggerElem - The button trigger
- */
-function scrollCarousel(carouselElems, triggerElem) {
-  const moveDown = triggerElem === btnNavPrevElem;
+function scrollCarousel(triggerElem) {
+  const isScrollingNext = triggerElem === btnNavNextElem;
 
   carouselElems.forEach((ul) => {
-    const liElems = ul.querySelectorAll("li");
+    const liElems = ul.children;
 
-    const start = moveDown ? liElems.length - 1 : 0;
-    const end = moveDown ? -1 : liElems.length;
-    const step = moveDown ? -1 : 1;
-
-    const firstPos = moveDown
-      ? carouselThirdPositionClass
-      : carouselFirstPositionClass;
-    const secondPos = carouselSecondPositionClass;
-    const thirdPos = moveDown
-      ? carouselFirstPositionClass
-      : carouselThirdPositionClass;
-
-    let overflowSet = false;
-    let counter = 0;
+    const start = isScrollingNext ? 0 : liElems.length - 1;
+    const end = isScrollingNext ? liElems.length : -1;
+    const step = isScrollingNext ? 1 : -1;
 
     for (let i = start; i !== end; i += step) {
       const li = liElems[i];
+      if (!li.classList.contains(carouselHiddenItemClass)) {
+        li.classList.add(carouselHiddenItemClass);
 
-      if (!li.classList.contains(carouselHiddenPositionClass) || overflowSet) {
-        switch (counter) {
-          case 0:
-            li.classList.remove(firstPos);
-            li.classList.add(carouselHiddenPositionClass);
-            overflowSet = true;
-            break;
+        const nextTargetIndex =
+          i + (isScrollingNext ? carouselSlotCount : -carouselSlotCount);
 
-          case 1:
-            li.classList.remove(secondPos);
-            li.classList.add(firstPos);
-            break;
-
-          case 2:
-            li.classList.remove(thirdPos);
-            li.classList.add(secondPos);
-            break;
-
-          case 3:
-            li.classList.remove(carouselHiddenPositionClass);
-            li.classList.add(thirdPos);
-            break;
-        }
+        const targetLi = liElems[nextTargetIndex];
+        if (targetLi) targetLi.classList.remove(carouselHiddenItemClass);
+        break;
       }
-
-      if (overflowSet) counter++;
-
-      if (counter === carouselModuleSlots + 1) break;
     }
   });
 }
