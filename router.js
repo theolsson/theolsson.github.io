@@ -19,7 +19,7 @@ async function init() {
   try {
     await loadNavbar();
 
-    const moduleToLoad =getInitialModule();
+    const moduleToLoad = getInitialModule();
     await moduleToLoad.loader();
   } catch (error) {
     console.error("Initialization failed:", error);

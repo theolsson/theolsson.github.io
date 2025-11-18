@@ -20,9 +20,17 @@ export function getFilePathFromRoot(moduleToLoad, fileExtension) {
 export function firstLetterToUpper(str) {
   if (typeof str !== "string")
     throw new TypeError(
-      `firstLetterToUpper expects a string, got ${typeof str}`
+      `firstLetterToUpper: Expects a string, got ${typeof str}`
     );
 
+  str = str.trim();
   if (str.length === 0) return "";
+  
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function getElemById(id) {
+  const elem = document.getElementById(id);
+  if (!elem) throw new Error(`getElemById: Missing element with id "${id}"`);
+  return elem;
 }

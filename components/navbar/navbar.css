@@ -7,6 +7,8 @@ nav {
 
   --navbar-padding-short: 20px; /* Padding along the short side of shortcuts*/
   --navbar-padding-long: 10px; /* Padding along the long side of shortcuts */
+
+  --carousel-slot-count: 1; /* Number of visible slots in carousel - set by JS */
 }
 
 /*----------------------------------------------------------------------*/
@@ -51,7 +53,10 @@ nav {
   grid-template-columns:
     minmax(var(--navbar-icon-size), calc(var(--navbar-icon-size) * 1.5))
     minmax(var(--navbar-arrow-height), calc(var(--navbar-arrow-height) * 1.5))
-    minmax(calc(var(--navbar-icon-size) * 3), calc(var(--navbar-icon-size) * 5))
+    minmax(
+      calc(var(--navbar-icon-size) * var(--carousel-slot-count)),
+      calc(var(--navbar-icon-size) * (var(--carousel-slot-count) + 1))
+    )
     minmax(var(--navbar-arrow-height), calc(var(--navbar-arrow-height) * 1.5));
 
   width: 100vw;
@@ -64,7 +69,10 @@ nav {
     grid-template-rows:
       calc(var(--navbar-icon-size) * 1.5)
       calc(var(--navbar-arrow-height) * 1.5)
-      calc(var(--navbar-icon-size) * 5)
+      minmax(
+        calc(var(--navbar-icon-size) * var(--carousel-slot-count)),
+        calc(var(--navbar-icon-size) * (var(--carousel-slot-count) + 1))
+      )
       calc(var(--navbar-arrow-height) * 1.5);
 
     height: 100vh;
@@ -76,55 +84,20 @@ nav {
 /*                              Carousel                                */
 /*----------------------------------------------------------------------*/
 .nav__carousel {
-  align-items: center;
-  display: grid;
-  grid-template-columns: 0 repeat(3, 1fr);
-  grid-template-rows: 60px; /* TODO: change to accomodate expansion height with full small screen functionality */
-  justify-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   overflow: hidden;
 }
 .nav__carousel--hidden {
-  visibility: hidden;
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.nav__carousel--first {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.nav__carousel--second {
-  grid-column: 3;
-  grid-row: 1;
-}
-
-.nav__carousel--third {
-  grid-column: 4;
-  grid-row: 1;
+  display: none;
 }
 
 @media (min-width: 769px) {
   .nav__carousel {
-    align-items: center;
-    grid-template-columns: 1fr;
-    grid-template-rows: 0 repeat(3, calc(var(--navbar-icon-size) * 1.5));
-    justify-items: left;
-  }
+    flex-direction: column;
 
-  .nav__carousel--first {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .nav__carousel--second {
-    grid-column: 1;
-    grid-row: 3;
-  }
-
-  .nav__carousel--third {
-    grid-column: 1;
-    grid-row: 4;
+    height: 100%;
   }
 }
 
@@ -199,8 +172,8 @@ nav {
   visibility: hidden;
 }
 
-.nav__title--current{
-  color: var(--contrast-color)!important;
+.nav__title--current {
+  color: var(--contrast-color) !important;
   font-weight: bold;
 }
 
