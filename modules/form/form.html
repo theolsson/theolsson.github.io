@@ -1,0 +1,80 @@
+<main>
+  <form id="custom-message-form">
+    <fieldset>
+      <legend>Type of message</legend>
+
+      <label
+        ><input type="radio" name="messageType" value="general" checked />
+        General</label
+      ><br />
+      <label
+        ><input type="radio" name="messageType" value="feedback" />
+        Feedback</label
+      ><br />
+      <label
+        ><input type="radio" name="messageType" value="bug" /> Bug Report</label
+      >
+    </fieldset>
+
+    <label>
+      Message<br />
+      <textarea
+        name="message"
+        required
+        placeholder="Do not reveal any PII"
+      ></textarea>
+    </label>
+
+    <fieldset>
+      <legend>Is this about a specific component or module? (optional)</legend>
+
+      <label><input type="checkbox" name="component" value="home" /> Home</label
+      ><br />
+      <label
+        ><input type="checkbox" name="component" value="clicker" />
+        Clicker</label
+      ><br />
+      <label
+        ><input type="checkbox" name="component" value="form" /> Form</label
+      >
+    </fieldset>
+
+    <label>
+      <input type="checkbox" id="consent" />
+      I consent to providing optional contact information (name, alias, email,
+      or LinkedIn) to the page owner to store privately for the purpose of
+      possibly getting in touch with me.
+      <br />
+      I understand my data will be stored privately for up to 1 month.
+      <br />
+      I understand I can withdraw my consent at any time by contacting the owner
+      via
+      <a href="https://github.com/theolsson" target="_blank"
+        >GitHub <img src="./shared/icons/open-in-new-tab.png" /> </a
+      >&nbsp;or
+      <a
+        href="https://www.Linkedin.com/in/theo-olsson-39010921b/?locale=en_US"
+        target="_blank"
+        >LinkedIn <img src="./shared/icons/open-in-new-tab.png" />
+      </a>
+    </label>
+
+    <label>
+      Name or alias<br />
+      <input type="text" name="name" id="name" disabled />
+    </label>
+
+    <label>
+      Contact<br />
+      <input
+        type="text"
+        name="contact"
+        id="contact"
+        placeholder="Email or URL"
+        disabled
+      />
+    </label>
+
+    <button type="button" id="submitFormBtn">Submit</button>
+  </form>
+</main>

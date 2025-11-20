@@ -7,9 +7,11 @@ import {
 } from "./components/navbar/navbar.js";
 import { init as initHome } from "./modules/home/home.js";
 import { init as initClicker } from "./modules/clicker/clicker.js";
+import { init as initForm } from "./modules/form/form.js";
 
 const modules = [
   { name: "home", loader: loadHome, init: initHome },
+  { name: "form", loader: loadForm, init: initForm },
   { name: "clicker", loader: loadClicker, init: initClicker },
 ];
 
@@ -26,7 +28,7 @@ async function init() {
   }
 }
 
-function getInitialModule(){
+function getInitialModule() {
   const sessionModule = sessionStorage.getItem(CURRENT_MODULE_KEY);
   return modules.find((m) => m.name === sessionModule) || modules[0];
 }
@@ -61,4 +63,8 @@ function loadHome() {
 
 function loadClicker() {
   return baseModuleLoader(modules.find((m) => m.name === "clicker"));
+}
+
+function loadForm() {
+  return baseModuleLoader(modules.find((m) => m.name === "form"));
 }
