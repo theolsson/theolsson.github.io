@@ -1,6 +1,6 @@
 <main>
   <form id="custom-message-form">
-    <fieldset>
+    <fieldset id="form-type">
       <legend>Type of message</legend>
 
       <label
@@ -12,35 +12,26 @@
         Feedback</label
       ><br />
       <label
-        ><input type="radio" name="messageType" value="bug" /> Bug Report</label
+        ><input type="radio" name="messageType" value="bug report" /> Bug Report</label
       >
     </fieldset>
 
     <label>
       Message<br />
       <textarea
+        id="form-message"
         name="message"
         required
         placeholder="Do not reveal any PII"
       ></textarea>
     </label>
 
-    <fieldset>
+    <fieldset id="form-component">
       <legend>Is this about a specific component or module? (optional)</legend>
-
-      <label><input type="checkbox" name="component" value="home" /> Home</label
-      ><br />
-      <label
-        ><input type="checkbox" name="component" value="clicker" />
-        Clicker</label
-      ><br />
-      <label
-        ><input type="checkbox" name="component" value="form" /> Form</label
-      >
     </fieldset>
 
     <label>
-      <input type="checkbox" id="consent" />
+      <input type="checkbox" id="form-pii-consent" />
       I consent to providing optional contact information (name, alias, email,
       or LinkedIn) to the page owner to store privately for the purpose of
       possibly getting in touch with me.
@@ -61,15 +52,15 @@
 
     <label>
       Name or alias<br />
-      <input type="text" name="name" id="name" disabled />
+      <input type="text" name="name" id="form-name" disabled />
     </label>
 
     <label>
       Contact<br />
       <input
+        id="form-contact"
         type="text"
         name="contact"
-        id="contact"
         placeholder="Email or URL"
         disabled
       />

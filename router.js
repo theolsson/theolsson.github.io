@@ -7,7 +7,7 @@ import {
 } from "./components/navbar/navbar.js";
 import { init as initHome } from "./modules/home/home.js";
 import { init as initClicker } from "./modules/clicker/clicker.js";
-import { init as initForm } from "./modules/form/form.js";
+import { init as initForm, generateCheckboxes } from "./modules/form/form.js";
 
 const modules = [
   { name: "home", loader: loadHome, init: initHome },
@@ -65,6 +65,7 @@ function loadClicker() {
   return baseModuleLoader(modules.find((m) => m.name === "clicker"));
 }
 
-function loadForm() {
-  return baseModuleLoader(modules.find((m) => m.name === "form"));
+async function loadForm() {
+  await baseModuleLoader(modules.find((m) => m.name === "form"));
+  return generateCheckboxes(modules);
 }
