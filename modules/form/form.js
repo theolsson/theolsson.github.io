@@ -1,3 +1,5 @@
+const devMode = true; // True interrupts submit and logs the formData
+
 import { getElemById, firstLetterToUpper } from "../../shared/services.js";
 
 const gFormId = "1FAIpQLSeLPViSqoPYxbxV1yIZuxxSHemgGHSlOjKGfnUJGqOdD_VEXg";
@@ -10,55 +12,65 @@ const gFormField = {
   contactInput: { entryId: "entry.220536337", elemId: "form-contact" },
 };
 
-/*
-    entry.153129400 - name NEW
-    entry.220536337 - cont inf NEW
-    entry.1752159269 - type NEW
-    entry.1758193509 - mod/comp NEW
-    entry.202649978 - message NEW
-    fvv - 1
-    partialResponse - [null,null,"-7985215742353439545"]
-    pageHistory - 0
-    fbzx - -7985215742353439545
-    submissionTimestamp - 1763533595352
-  */
+const piiConsentId = "form-pii-consent";
+const submitBtnId = "submit-form-btn";
+const formId = "custom-message-form";
 
 let hasPIIConsent = false;
 
 export function init() {
   setPIIConsentListener();
-
-  const formElem = getElemById("submitFormBtn");
-  formElem.addEventListener("click", () => {
-    const formData = createFormData();
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-    if (!formData) throw new Error("formInit: could not create form data");
-
-    // postToGoogleForms(formData);
-  });
+  setSubmitEventListener();
 }
 
 function setPIIConsentListener() {
-  getElemById("form-pii-consent").addEventListener("change", function () {
+  const consentElem = getElemById(piiConsentId);
+  const nameElem = getElemById(gFormField.nameInput.elemId);
+  const contactElem = getElemById(gFormField.contactInput.elemId);
+
+  consentElem.addEventListener("change", function () {
     hasPIIConsent = this.checked;
-    getElemById("form-name").disabled = !hasPIIConsent;
-    getElemById("form-contact").disabled = !hasPIIConsent;
+
+    if (hasPIIConsent) {
+      nameElem.disabled = false;
+      contactElem.disabled = false;
+    } else {
+      nameElem.value = "";
+      nameElem.disabled = true;
+      contactElem.value = "";
+      contactElem.disabled = true;
+    }
   });
 }
 
-function createFormData() {
+function setSubmitEventListener() {
+  const formElem = getElemById(submitBtnId);
+  formElem.addEventListener("click", () => {
+    const messageInput = getElemById(gFormField.messageInput.elemId).value;
+
+    if (!messageInput || messageInput === "")
+      return console.warn("message empty");
+
+    const formData = createFormData(messageInput);
+    if (!formData) throw new Error("formInit: could not create form data");
+
+    postToGoogleForms(formData);
+
+    const consentElem = getElemById(piiConsentId);
+    consentElem.checked = false;
+    consentElem.dispatchEvent(new Event("change"));
+  });
+}
+
+function createFormData(messageInput) {
   const formData = new FormData();
 
   formData.append(
     gFormField.typeInput.entryId,
-    getCheckInputAsString(getElemById(gFormField.typeInput.elemId)) || ""
+    getCheckInputAsString(getElemById(gFormField.typeInput.elemId)) ||
+      "General fallback"
   );
-  formData.append(
-    gFormField.messageInput.entryId,
-    getElemById(gFormField.messageInput.elemId).value || ""
-  );
+  formData.append(gFormField.messageInput.entryId, messageInput);
   formData.append(
     gFormField.componentInput.entryId,
     getCheckInputAsString(getElemById(gFormField.componentInput.elemId)) || ""
@@ -76,17 +88,18 @@ function createFormData() {
     formData.append(gFormField.nameInput.entryId, "");
     formData.append(gFormField.contactInput.entryId, "");
   }
-  formData.append("fvv", "1");
-  const fbzxUUID = crypto.randomUUID();
-  formData.append("partialResponse", [null, null, fbzxUUID]);
-  formData.append("pageHistory", "0");
-  formData.append("fbzx", fbzxUUID);
-
   return formData;
 }
 
 function postToGoogleForms(formData) {
-  return;
+  if (devMode) {
+    console.log("submit guard through devMode = true");
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+    getElemById(formId).reset();
+    return;
+  }
   fetch("https://docs.google.com/forms/d/e/" + gFormId + "/formResponse", {
     method: "POST",
     mode: "no-cors",
@@ -94,6 +107,7 @@ function postToGoogleForms(formData) {
   })
     .then(function () {
       console.log("✓ Submitted to Google Form (opaque response is expected)");
+      getElemById(formId).reset();
     })
     .catch(function (err) {
       console.error("Submission error:", err);
@@ -104,7 +118,7 @@ export function generateCheckboxes(moduleObjArray) {
   if (!Array.isArray(moduleObjArray))
     throw new Error("generateCheckboxes: invalid modules array");
 
-  const fieldsetElem = getElemById("form-component");
+  const fieldsetElem = getElemById(gFormField.componentInput.elemId);
 
   // Destructure to access only the property needed locally
   moduleObjArray.forEach(({ name }) => {
